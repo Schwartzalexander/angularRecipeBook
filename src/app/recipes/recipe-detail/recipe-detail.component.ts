@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Recipe } from 'src/app/model/recipe.model';
 import { DataService } from 'src/app/services/data.service';
 import { LoggingService } from 'src/app/services/logging.service';
+import { RecipeService } from 'src/app/services/recipe.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -12,7 +13,7 @@ export class RecipeDetailComponent implements OnInit {
 
   @Input('recipe') recipe: Recipe | undefined
 
-  constructor(private dataService: DataService, private loggingService: LoggingService) {
+  constructor(private dataService: DataService, private loggingService: LoggingService, private recipeService: RecipeService) {
 
     this.dataService.eventEmitter.subscribe((message: string) => this.reactToEventFromService(message))
   }

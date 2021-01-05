@@ -13,10 +13,10 @@
 <app-footer #contentFooter [lastAddedIngredient]="lastAddedIngredient">
   <p appBasicHighlight>Thank you for using this app.</p>
   <p appBetterHighlight>Thank you so fucking much.</p>
-  <p [appBestHighlight]="'blue'">A name can be assigned to a single property of a directive using @Input('...'). Then this directive can be accessed by using that name, like in this paragraph.</p>
-  <p appBestHighlight [mouseoverColor]="'brown'" [mouseoverBackground]="'aliceblue'" [defaultBackground]="'red'"
-    [defaultColor]="'white'">All highlighting options are configurable via properties.</p> 
-    <p appBestHighlight mouseoverColor="brown" mouseoverBackground="aliceblue" defaultBackground="red"
-    defaultColor="white">Same as above, but without squared brackets and single quotation marks. Works for property binding, but can be confused with real existing attributes.</p>
-    <p *appUnless="false">Only shown, if false.</p>
+  <p [appBestHighlight]="'blue'">A name can be assigned to a single property of a directive using @Input('...'). Then
+    this directive can be accessed by using that name, like in this paragraph.</p>
+  <p appBestHighlight="green" mouseoverBackground="aliceblue" defaultBackground="red" defaultColor="white">All
+    highlighting options are configurable via properties. But without squared brackets and single quotation marks. Works
+    for property binding, but can be confused with real existing attributes.</p>
+  <p *appUnless="false">Only shown, if false.</p>
 </app-footer>

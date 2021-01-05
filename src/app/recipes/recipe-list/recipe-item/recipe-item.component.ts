@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Recipe } from 'src/app/model/recipe.model';
+import { LoggingService } from 'src/app/services/logging.service';
+import { RecipeService } from 'src/app/services/recipe.service';
 
 @Component({
   selector: 'app-recipe-item',
@@ -16,11 +18,14 @@ export class RecipeItemComponent implements OnInit {
   // @Input('recipe-item-awesome-binding-name') recipe: Recipe = new Recipe("Test", "Test", "https://img.chefkoch-cdn.de/rezepte/1229761228049609/bilder/778860/crop-960x640/party-mettigel.jpg")
   @Input() recipe: Recipe = new Recipe("Test", "Test", "https://img.chefkoch-cdn.de/rezepte/1229761228049609/bilder/778860/crop-960x640/party-mettigel.jpg")
 
-  // constructor(recipe: Recipe) {
-  //   this.recipe = recipe
-  // }
+  constructor(private recipeService: RecipeService, private loggingService: LoggingService) {
+    }
 
   ngOnInit(): void {
   }
 
+  onClick() {
+    this.recipeService.recipeSelectionEventEmitter.emit(this.recipe)
+    this.loggingService.log(this.recipe); 
+  }
 }
