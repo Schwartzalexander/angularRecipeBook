@@ -4,7 +4,7 @@
     <div class="col-md-12">
       <app-recipes *ngIf="page === 'recipes'"></app-recipes>
       <app-shopping-list *ngIf="page === 'shoppingList'" (itemAdded)="onItemAdded($event)"
-      (onItemEdited)="onItemEdited($string, $number)"></app-shopping-list>
+      (itemEdited)="onItemEdited($event)"></app-shopping-list>
       <p></p>
     </div>
   </div>
