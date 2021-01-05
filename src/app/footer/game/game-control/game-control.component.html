@@ -1,0 +1,33 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button class="btn btn-success" *ngIf="!isRunning" (click)="onStart()">Start game</button>
+            <button class="btn btn-danger" *ngIf="isRunning" (click)="onStop()">Pause game</button>
+            <hr>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Odd</th>
+                        <th scope="col">Even</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <ul>
+                                <app-game-odd *ngFor="let number of odds" [number]="number">
+                                </app-game-odd>
+                            </ul>
+                        </td>
+                        <td>
+                            <ul>
+                                <app-game-even *ngFor="let number of evens" [number]="number">
+                                </app-game-even>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</nav>

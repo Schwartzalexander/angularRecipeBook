@@ -1,0 +1,9 @@
+p {
+    text-align: center;
+    align-self: center;
+    align-content: center;
+    border: white;
+    color: white;
+    background-color: royalblue;
+    padding: 10px;
+}

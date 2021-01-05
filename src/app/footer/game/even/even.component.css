@@ -1,0 +1,8 @@
+p {
+    text-align: center;
+    align-self: center;
+    align-content: center;
+    border: black;
+    background-color: violet;
+    padding: 10px;
+}

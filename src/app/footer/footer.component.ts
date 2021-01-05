@@ -8,7 +8,8 @@ import { Ingredient } from '../model/ingredient.model';
 })
 export class FooterComponent implements OnInit {
 
-  @Input('lastAddedIngredient') lastAddedIngredient : Ingredient
+
+  @Input('lastAddedIngredient') lastAddedIngredient: Ingredient | undefined
   constructor() { }
 
   ngOnInit(): void {

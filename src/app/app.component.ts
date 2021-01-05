@@ -9,7 +9,7 @@ import { Ingredient } from './model/ingredient.model';
 export class AppComponent implements AfterContentInit {
 
   page : string = 'recipes'
-  lastAddedIngredient : Ingredient
+  lastAddedIngredient : Ingredient | undefined
   
   title = 'PROJECT';
   // @ContentChild('contentFooter', {static: true}) footer : ElementRef;
