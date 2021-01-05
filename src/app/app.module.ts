@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component'; 
+import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
 import { RecipesComponent } from './recipes/recipes.component';
@@ -14,11 +14,12 @@ import { FooterComponent } from './footer/footer.component';
 import { GameComponent } from './footer/game/game.component';
 import { GameControlComponent } from './footer/game/game-control/game-control.component';
 import { OddComponent } from './footer/game/odd/odd.component';
-import { EvenComponent } from './footer/game/even/even.component'; 
+import { EvenComponent } from './footer/game/even/even.component';
 import { BasicHighlightDirective } from './directives/basic-highlight.directive';
 import { BetterHighlightDirective } from './directives/better-highlight.directive';
 import { BestHighlightDirective } from './directives/best-highlight.directive';
 import { UnlessDirective } from './directives/unless.directive';
+import { DropdownDirective } from './directives/dropdown.directive';
 
 @NgModule({
   declarations: [
@@ -34,11 +35,12 @@ import { UnlessDirective } from './directives/unless.directive';
     GameComponent,
     GameControlComponent,
     OddComponent,
-    EvenComponent, 
+    EvenComponent,
     BasicHighlightDirective,
     BetterHighlightDirective,
     BestHighlightDirective,
-    UnlessDirective
+    UnlessDirective,
+    DropdownDirective
   ],
   imports: [
     BrowserModule,
