@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core'; 
+import { Component, Input, OnInit } from '@angular/core';
 import { Recipe } from 'src/app/model/recipe.model';
+import { DataService } from 'src/app/services/data.service';
+import { LoggingService } from 'src/app/services/logging.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -9,9 +11,22 @@ import { Recipe } from 'src/app/model/recipe.model';
 export class RecipeDetailComponent implements OnInit {
 
   @Input('recipe') recipe: Recipe | undefined
-  // constructor(recipe: Recipe) { this.recipe = recipe }
+
+  constructor(private dataService: DataService, private loggingService: LoggingService) {
+
+    this.dataService.eventEmitter.subscribe((message: string) => this.reactToEventFromService(message))
+  }
 
   ngOnInit(): void {
+  }
+
+  /**
+   * This function is called, after the eventEmitter in dataService is emitted. This happens, when clicking the edit button in shopping-edit-component.
+   * @param message 
+   */
+  reactToEventFromService(message: string) {
+    this.loggingService.log(message)
+    //alert(message)
   }
 
 }

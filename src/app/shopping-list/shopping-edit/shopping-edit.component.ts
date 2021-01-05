@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Ingredient } from 'src/app/model/ingredient.model';
+import { DataService } from 'src/app/services/data.service';
 import { LoggingService } from 'src/app/services/logging.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class ShoppingEditComponent implements OnInit {
   @ViewChild('nameInput', { static: false }) nameInput: ElementRef | undefined
   @ViewChild('amountInput') amountInput: ElementRef | undefined
 
-  constructor(private loggingService: LoggingService) {}
+  constructor(private loggingService: LoggingService, private dataSerive : DataService) {}
 
   ngOnInit(): void {
   }
@@ -27,10 +28,11 @@ export class ShoppingEditComponent implements OnInit {
     const ingredient = new Ingredient(nameInput.value, parseInt(amountInput.value))
     this.itemAdded.emit(ingredient)
   }
-  onEditClicked() {
+  onEditClicked(nameInput: HTMLInputElement, amountInput: HTMLInputElement) {
     if (this.nameInput === undefined || this.amountInput === undefined)
       return;
     const ingredient = new Ingredient(this.nameInput.nativeElement.value, this.amountInput.nativeElement.value)
     this.itemEdited.emit(ingredient)
+    this.dataSerive.eventEmitter.emit("The edit shopping list button was clicked, milord")
   }
 }

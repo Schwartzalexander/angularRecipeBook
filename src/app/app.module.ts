@@ -21,6 +21,7 @@ import { BestHighlightDirective } from './directives/best-highlight.directive';
 import { UnlessDirective } from './directives/unless.directive';
 import { DropdownDirective } from './directives/dropdown.directive';
 import { LoggingService } from './services/logging.service';
+import { DataService } from './services/data.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { LoggingService } from './services/logging.service';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [LoggingService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
