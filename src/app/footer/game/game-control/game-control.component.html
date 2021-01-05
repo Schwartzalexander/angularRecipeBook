@@ -4,6 +4,15 @@
             <button class="btn btn-success" *ngIf="!isRunning" (click)="onStart()">Start game</button>
             <button class="btn btn-danger" *ngIf="isRunning" (click)="onStop()">Pause game</button>
             <hr>
+            <div [ngSwitch]="counter">
+                <p *ngSwitchCase="1">Current value is 1.</p>
+                <p *ngSwitchCase="2">Current value is 2.</p>
+                <p *ngSwitchCase="5">Current value is 5.</p>
+                <p *ngSwitchCase="10">Current value is 10.</p>
+                <p *ngSwitchCase="50">Current value is 50.</p>
+                <p *ngSwitchCase="100">Current value is 100.</p>
+                <p *ngSwitchDefault>Current value is something else.</p>
+            </div>
             <table class="table">
                 <thead>
                     <tr>

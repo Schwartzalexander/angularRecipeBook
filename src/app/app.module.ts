@@ -18,6 +18,7 @@ import { EvenComponent } from './footer/game/even/even.component';
 import { BasicHighlightDirective } from './directives/basic-highlight.directive';
 import { BetterHighlightDirective } from './directives/better-highlight.directive';
 import { BestHighlightDirective } from './directives/best-highlight.directive';
+import { UnlessDirective } from './directives/unless.directive';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { BestHighlightDirective } from './directives/best-highlight.directive';
     EvenComponent, 
     BasicHighlightDirective,
     BetterHighlightDirective,
-    BestHighlightDirective
+    BestHighlightDirective,
+    UnlessDirective
   ],
   imports: [
     BrowserModule,
