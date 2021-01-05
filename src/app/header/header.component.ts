@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { LoggingService } from '../services/logging.service';
 
 @Component({
   selector: 'app-header',
@@ -11,18 +12,18 @@ export class HeaderComponent implements OnInit {
 
 
 
-constructor() { }
+  constructor(private loggingService: LoggingService) {}
 
 ngOnInit(): void {
 }
 
 onRecipesClicked() {
-  console.log('Recipes clicked')
+  this.loggingService.log('Recipes clicked')
   this.pageChangeEmitter.emit({name: 'recipes'})
 }
 
 onShoppingListClicked() {
-  console.log('Shopping list clicked')
+  this.loggingService.log('Shopping list clicked')
   this.pageChangeEmitter.emit({name: 'shoppingList'})
 }
 }

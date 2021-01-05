@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Ingredient } from '../model/ingredient.model';
+import { LoggingService } from '../services/logging.service';
 
 @Component({
   selector: 'app-shopping-list',
@@ -16,19 +17,20 @@ export class ShoppingListComponent implements OnInit {
     new Ingredient('Chicken', 1),
     new Ingredient('Fish dicks', 12)
   ]
-  constructor() { }
+
+  constructor(private loggingService: LoggingService) { }
 
   ngOnInit(): void {
   }
 
   onItemAdded(ingredient: Ingredient) {
-    console.log("The item "+ingredient+" was added, dude. Sincerly, your shopping-list.")
+    this.loggingService.log("The item " + ingredient + " was added, dude. Sincerly, your shopping-list.")
     this.ingredients.push(ingredient)
     this.itemAdded.emit(ingredient)
   }
 
   onItemEdited(ingredient: Ingredient) {
-    console.log("The item "+ingredient+" was edited, dude. Sincerly, your shopping-list.")
+    this.loggingService.log("The item " + ingredient + " was edited, dude. Sincerly, your shopping-list.")
     this.itemEdited.emit(ingredient)
   }
 

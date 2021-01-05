@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'; 
 import { Recipe } from 'src/app/model/recipe.model';
+import { LoggingService } from 'src/app/services/logging.service';
 
 @Component({
   selector: 'app-recipe-list',
@@ -14,13 +15,14 @@ export class RecipeListComponent implements OnInit {
     new Recipe("Mettigel", "Lecker stachelig","https://img.chefkoch-cdn.de/rezepte/1229761228049609/bilder/778860/crop-960x640/party-mettigel.jpg")
   ]
   @Output('clickedRecipe') recipeEmitter = new EventEmitter<Recipe>();
-  constructor() { }
+
+  constructor(private loggingService: LoggingService) {}
 
   ngOnInit(): void {
   }
 
   recipeClicked(recipe: Recipe) {
-    console.log(recipe);
+    this.loggingService.log(recipe);
     this.recipeEmitter.emit(recipe)
   }
 }

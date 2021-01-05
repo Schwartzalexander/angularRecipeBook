@@ -1,5 +1,6 @@
 import { AfterContentInit, Component, ContentChild, ElementRef, EventEmitter } from '@angular/core';
 import { Ingredient } from './model/ingredient.model';
+import { LoggingService } from './services/logging.service';
 
 @Component({
   selector: 'app-root',
@@ -14,22 +15,23 @@ export class AppComponent implements AfterContentInit {
   title = 'PROJECT';
   // @ContentChild('contentFooter', {static: true}) footer : ElementRef;
 
+  constructor(private loggingService: LoggingService) {}
   
   onItemAdded(ingredient: Ingredient) {
-    console.log("The item "+ingredient+" was added, dude. Sincerly, your aplication.") 
+    this.loggingService.log("The item "+ingredient+" was added, dude. Sincerly, your aplication.") 
     this.lastAddedIngredient = ingredient
   }
 
   onItemEdited(ingredient: Ingredient) {
-    console.log("The item "+ingredient+" was edited, dude. Sincerly, your aplication.") 
+    this.loggingService.log("The item "+ingredient+" was edited, dude. Sincerly, your aplication.") 
   } 
   
   ngAfterContentInit() {
-    // console.log('Footer content: ' + this.footer.nativeElement.textContent)
+    //     this.loggingService.log('Footer content: ' + this.footer.nativeElement.textContent)
   }
 
   changePage(event : any) {
-    console.log(event.name);
+    this.loggingService.log(event.name);
     this.page = event.name
     
   }
