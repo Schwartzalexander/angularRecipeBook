@@ -1,9 +1,12 @@
-<app-header></app-header>
+<app-header (onPageChange)="changePage($event)"></app-header>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <app-recipes></app-recipes>
-      <app-shopping-list></app-shopping-list>
+      <app-recipes *ngIf="page === 'recipes'"></app-recipes>
+      <app-shopping-list *ngIf="page === 'shoppingList'" (itemAdded)="onItemAdded($event)"
+      (onItemEdited)="onItemEdited($string, $number)"></app-shopping-list>
+      <p></p>
     </div>
   </div>
 </div>
+<app-footer #contentFooter [lastAddedIngredient]="lastAddedIngredient"><p>Thank you for using this app.</p></app-footer>
