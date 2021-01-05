@@ -8,7 +8,7 @@ import { Recipe } from '../model/recipe.model';
 })
 export class RecipesComponent implements OnInit {
 
-  shownRecipe : Recipe
+  shownRecipe : Recipe | undefined
 
   constructor() { }
 

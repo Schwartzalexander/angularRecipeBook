@@ -11,8 +11,8 @@ export class ShoppingEditComponent implements OnInit {
   @Output() itemAdded = new EventEmitter<{ name: string, amount: number }>()
   @Output('itemEditedSuperBindingNAME') itemEdited = new EventEmitter<{ name: string, amount: number }>()
 
-  @ViewChild('nameInput', { static: false }) nameInput: ElementRef;
-  @ViewChild('amountInput') amountInput: ElementRef;
+  @ViewChild('nameInput', { static: false }) nameInput: ElementRef | undefined
+  @ViewChild('amountInput') amountInput: ElementRef | undefined
 
   constructor() { }
 
@@ -23,10 +23,12 @@ export class ShoppingEditComponent implements OnInit {
     console.log(this.nameInput)
     console.log(nameInput)
     // this.itemAdded.emit({ name: nameInput.value, amount: amountInput.value })
-    const ingredient = new Ingredient(this.nameInput.nativeElement.value, this.amountInput.nativeElement.value)
+    const ingredient = new Ingredient(nameInput.value, parseInt(amountInput.value))
     this.itemAdded.emit(ingredient)
   }
-  onEditClicked({ name: name, amount: amount }) {
+  onEditClicked() {
+    if (this.nameInput === undefined || this.amountInput === undefined)
+      return;
     const ingredient = new Ingredient(this.nameInput.nativeElement.value, this.amountInput.nativeElement.value)
     this.itemEdited.emit(ingredient)
   }
