@@ -33,6 +33,6 @@ export class ShoppingEditComponent implements OnInit {
       return;
     const ingredient = new Ingredient(this.nameInput.nativeElement.value, this.amountInput.nativeElement.value)
     this.itemEdited.emit(ingredient)
-    this.dataSerive.eventEmitter.next("The edit shopping list button was clicked, milord")
+    this.dataSerive.subject.next("The edit shopping list button was clicked, milord")
   }
 }

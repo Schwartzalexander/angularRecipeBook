@@ -21,7 +21,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   constructor(private dataService: DataService, private loggingService: LoggingService, private recipeService: RecipeService, private shoppingService: ShoppingService, private activeRoute: ActivatedRoute) {
 
-    this.dataServiceSubscription = this.dataService.eventEmitter.subscribe((message: string) => this.reactToEventFromService(message))
+    this.dataServiceSubscription = this.dataService.subject.subscribe((message: string) => this.reactToEventFromService(message))
   }
 
   ngOnInit(): void {
@@ -41,7 +41,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * This function is called, after the eventEmitter in dataService is emitted. This happens, when clicking the edit button in shopping-edit-component.
+   * This function is called, after the subject in dataService is emitted. This happens, when clicking the edit button in shopping-edit-component.
    * @param message 
    */
   reactToEventFromService(message: string) {

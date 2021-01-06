@@ -9,6 +9,6 @@ export class DataService {
 
   constructor(private loggingService : LoggingService) { }
 
-  eventEmitter = new Subject<string>()
+  subject = new Subject<string>()
   
 }
