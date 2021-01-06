@@ -9,6 +9,7 @@ import { RecipeEditComponent } from "./recipes/recipe-edit/recipe-edit.component
 import { RecipeListComponent } from "./recipes/recipe-list/recipe-list.component";
 import { RecipesComponent } from "./recipes/recipes.component";
 import { ShoppingListComponent } from "./shopping-list/shopping-list.component";
+import { UsersComponent } from "./users/users.component";
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'recipes', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
   { path: 'shoppingList', component: ShoppingListComponent },
   { path: 'stupid-game', component: GameComponent },
   { path: 'oberservables', component: OberservablesComponent },
+  { path: 'users', component: UsersComponent },
   { path: 'not-found', component: Error404Component, data: { message: 'Page not found!' } },
   { path: '**', redirectTo: '/not-found' }
 ]

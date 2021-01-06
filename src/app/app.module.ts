@@ -24,6 +24,8 @@ import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component
 import { RecipesComponent } from './recipes/recipes.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
+import { UsersComponent } from './users/users.component';
+import { UserItemComponent } from './users/user-item/user-item.component';
 
 
 @NgModule({
@@ -49,7 +51,9 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
     Error404Component,
     NoRecipeShownComponent,
     RecipeEditComponent,
-    OberservablesComponent
+    OberservablesComponent,
+    UsersComponent,
+    UserItemComponent
   ],
   imports: [
     BrowserModule,
