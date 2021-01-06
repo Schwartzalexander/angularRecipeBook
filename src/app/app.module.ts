@@ -23,6 +23,7 @@ import { DropdownDirective } from './directives/dropdown.directive';
 import { LoggingService } from './services/logging.service';
 import { DataService } from './services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Error404Component } from './error-pages/error404/error404.component';
 
 @NgModule({
   declarations: [
@@ -43,13 +44,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BetterHighlightDirective,
     BestHighlightDirective,
     UnlessDirective,
-    DropdownDirective
+    DropdownDirective,
+    Error404Component
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
