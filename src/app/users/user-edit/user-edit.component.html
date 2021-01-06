@@ -9,7 +9,8 @@
                 type="text"
                 id="name" 
                 formControlName="name"
-                class="form-control">
+                class="form-control">            
+                <p class="help-block" *ngIf="!userForm.get('name')?.valid && userForm.get('name')?.touched">Please enter a name.</p>
         </div>
         <div class="col-sm-12 form-group">
             <label for="email">Email</label>
@@ -17,7 +18,8 @@
                 type="text"
                 id="email"
                 formControlName="email"
-                class="form-control">
+                class="form-control">         
+                <p class="help-block" *ngIf="!userForm.get('email')?.valid && userForm.get('email')?.touched">Please enter a valid email address.</p>
         </div>        
         <div class="col-sm-12 form-group">
             <label for="password">Password</label>
@@ -25,7 +27,8 @@
                 type="text"
                 id="password"
                 formControlName="password"
-                class="form-control">
+                class="form-control">         
+                <p class="help-block" *ngIf="!userForm.get('password')?.valid && userForm.get('password')?.touched">Please enter a password with at least 8 characters.</p>
         </div>
         <div class="col-sm-12 form-group">
             <label for="gender">Gender</label>
@@ -37,12 +40,13 @@
                         formControlName="gender"
                         [value]="genderOption">   
                 {{genderOption}}</label>
-            </div>            
+            </div>                     
+            <p class="help-block" *ngIf="!userForm.get('gender')?.valid && userForm.get('gender')?.touched">Please select a gender.</p>
         </div>
        
         <div class="row">
             <div class="col-xs-12">
-                <button class="btn btn-success" type="submit">Save</button>
+                <button class="btn btn-success" [disabled]="!userForm?.valid" type="submit">Save</button>
             </div>
         </div>
     </div>

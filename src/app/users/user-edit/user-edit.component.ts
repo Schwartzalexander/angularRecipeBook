@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/model/user.model';
 import { UserService } from 'src/app/services/user.service';
@@ -42,10 +42,10 @@ export class UserEditComponent implements OnInit {
 
   createForm() : FormGroup{
     return new FormGroup({
-      'name': new FormControl(null),
-      'email': new FormControl(null),
-      'password': new FormControl(null),
-      'gender': new FormControl('transsex man to female'),
+      'name': new FormControl("Anna", Validators.required),
+      'email': new FormControl("anna@aSchwartz.de", [Validators.required, Validators.email]),
+      'password': new FormControl("456456456654", [Validators.required, Validators.minLength(8)]),
+      'gender': new FormControl("female", Validators.required),
     });
   }
 
