@@ -13,7 +13,7 @@ export class OberservablesComponent implements OnInit, OnDestroy {
   private customCounterSubscription: Subscription | undefined
   count: number = 0
   customCount: number = 0
-  customOperatedData: string = 0
+  customOperatedData: string = ''
   customError: string = ''
   constructor() { }
 
