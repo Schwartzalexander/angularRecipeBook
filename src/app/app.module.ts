@@ -24,8 +24,12 @@ import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component
 import { RecipesComponent } from './recipes/recipes.component';
 import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
+import { NoUserShownComponent } from './users/no-user-shown/no-user-shown.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
+import { UserEditComponent } from './users/user-edit/user-edit.component';
+import { UserItemComponent } from './users/user-list/user-item/user-item.component';
+import { UserListComponent } from './users/user-list/user-list.component';
 import { UsersComponent } from './users/users.component';
-import { UserItemComponent } from './users/user-item/user-item.component';
 
 
 @NgModule({
@@ -53,7 +57,11 @@ import { UserItemComponent } from './users/user-item/user-item.component';
     RecipeEditComponent,
     OberservablesComponent,
     UsersComponent,
-    UserItemComponent
+    UserItemComponent,
+    UserListComponent,
+    UserEditComponent, 
+    NoUserShownComponent,
+    UserDetailComponent
   ],
   imports: [
     BrowserModule,

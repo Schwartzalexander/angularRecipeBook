@@ -1,0 +1,6 @@
+<h3 *ngIf="editMode">Edit {{ user?.name }}</h3>
+<h3 *ngIf="!editMode">New user</h3>
+
+<form (ngSubmit)="onSubmit()" #userForm="ngForm">
+
+</form>

@@ -1,15 +1,17 @@
+
+
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { User } from '../model/user.model';
-import { LoggingService } from '../services/logging.service';
-import { UserService } from '../services/user.service';
+import { User } from 'src/app/model/user.model'; 
+import { LoggingService } from 'src/app/services/logging.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  selector: 'app-user-list',
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UserListComponent implements OnInit {
 
   users : User[] | undefined
   userForm : FormGroup | undefined

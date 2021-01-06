@@ -4,7 +4,7 @@ import { User } from '../model/user.model';
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class UserService {
 
   users: User[] = [
     new User('erSch', 'mail@aSchwartz.de', '123456', 'male'),
