@@ -13,7 +13,7 @@ export class UserEditComponent implements OnInit {
   id: number | undefined
   editMode = false;
   user: User | undefined
-  userForm: FormGroup
+  userForm: FormGroup = this.createForm()
 
   // radio options
   genderOptions = ['male', 'female', 'transsex', 'transgender', 'söder', 'transsex man to female', 'guy with small dick']
@@ -29,14 +29,7 @@ export class UserEditComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute, private userService: UserService, private router: Router,
     private route: ActivatedRoute) { }
 
-  ngOnInit(): void {
-    this.userForm = new FormGroup({
-      'name': new FormControl(null),
-      'email': new FormControl(null),
-      'password': new FormControl(null),
-      'gender': new FormControl('transsex man to female'),
-    });
-
+  ngOnInit(): void { 
     this.activeRoute.params.subscribe(
       (params) => {
         this.id = +params['id']
@@ -45,6 +38,15 @@ export class UserEditComponent implements OnInit {
           this.user = this.userService.users[this.id]
       }
     )
+  }
+
+  createForm() : FormGroup{
+    return new FormGroup({
+      'name': new FormControl(null),
+      'email': new FormControl(null),
+      'password': new FormControl(null),
+      'gender': new FormControl('transsex man to female'),
+    });
   }
 
   onSubmit() {
