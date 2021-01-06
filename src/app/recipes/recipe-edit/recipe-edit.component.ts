@@ -18,12 +18,16 @@ export class RecipeEditComponent implements OnInit {
 
   // select options
   poisonousOptions = ['No', 'A little', 'Only to my enemies', 'Yes, ma\'am']
+  // radio options
+  ratingOptions = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
+
 
   // Default values
   defaultName = "Krautknödel"
   defaultDescription = "Nur für echte Deutsche. Alle anderen furzen vom Kraut."
   defaultImagePath = "https://ais.kochbar.de/kbrezept/109581_1009663/1200x1200/rumaenische-krautwickel-sarmale-rezept-bild-nr-2.jpg"
   defaultPoisonous = this.poisonousOptions[2]
+  defaultRating = this.ratingOptions[4]
 
   //Two-way-bound values
   descriptionValue : string | undefined = this.defaultDescription
