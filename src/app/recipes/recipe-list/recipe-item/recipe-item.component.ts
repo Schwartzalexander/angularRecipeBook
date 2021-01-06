@@ -16,8 +16,8 @@ import { RecipeService } from 'src/app/services/recipe.service';
 })
 export class RecipeItemComponent implements OnInit {
   // @Input('recipe-item-awesome-binding-name') recipe: Recipe = new Recipe("Test", "Test", "https://img.chefkoch-cdn.de/rezepte/1229761228049609/bilder/778860/crop-960x640/party-mettigel.jpg")
-  @Input() recipe: Recipe = new Recipe("Test", "Test", "https://img.chefkoch-cdn.de/rezepte/1229761228049609/bilder/778860/crop-960x640/party-mettigel.jpg")
-
+  @Input() recipe: Recipe | undefined
+  
   constructor(private recipeService: RecipeService, private loggingService: LoggingService) {
     }
 

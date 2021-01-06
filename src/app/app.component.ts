@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, ContentChild, ElementRef, EventEmitter } from '@angular/core';
 import { Ingredient } from './model/ingredient.model';
 import { LoggingService } from './services/logging.service';
+import { ShoppingService } from './services/shopping.service';
 
 @Component({
   selector: 'app-root',
@@ -12,22 +13,17 @@ export class AppComponent implements AfterContentInit {
   page : string = 'recipes'
   lastAddedIngredient : Ingredient | undefined
   
-  title = 'PROJECT';
+  title = 'Angular Recipe Book';
   // @ContentChild('contentFooter', {static: true}) footer : ElementRef;
 
-  constructor(private loggingService: LoggingService) {}
-  
-  onItemAdded(ingredient: Ingredient) {
-    this.loggingService.log("The item "+ingredient+" was added, dude. Sincerly, your aplication.") 
-    this.lastAddedIngredient = ingredient
-  }
-
-  onItemEdited(ingredient: Ingredient) {
-    this.loggingService.log("The item "+ingredient+" was edited, dude. Sincerly, your aplication.") 
-  } 
+  constructor(private loggingService: LoggingService, private shoppingService : ShoppingService) {}
   
   ngAfterContentInit() {
-    //     this.loggingService.log('Footer content: ' + this.footer.nativeElement.textContent)
+    this.shoppingService.ingredientAddedEventEmitter.subscribe(
+      (ingredient : Ingredient) => {
+        this.lastAddedIngredient = ingredient
+      }
+    )
   }
 
   changePage(event : any) {

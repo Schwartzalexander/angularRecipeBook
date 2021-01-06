@@ -15,7 +15,7 @@
                 Manage Recipe <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#">To shopping list</a></li>
+                <li><a href="#" (click)="addToShoppingList()">To shopping list</a></li>
                 <li><a href="#">Edit recipe</a></li>
                 <li><a href="#">Delete recipe</a></li>
             </ul>
@@ -24,12 +24,33 @@
         <br>
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-12">
-        {{ recipe?.description}}
-    </div>
-</div>
 
 <div class="row">
-    <div class="col-xs-12"><h2>Ingredients</h2></div>
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                {{ recipe?.description}}
+
+                <h2>Ingredients</h2>
+                <table class="table" *ngIf="areThereIngredients(); else noIngredients">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ingredient</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ingredient of recipe?.ingredients">
+                            <td>{{ingredient.name}}</td>
+                            <td>{{ingredient.amount}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ng-template #noIngredients>
+                    <p>There are no ingredients.</p>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
 </div>
