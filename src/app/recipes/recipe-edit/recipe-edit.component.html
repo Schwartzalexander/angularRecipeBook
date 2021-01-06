@@ -1,2 +1,21 @@
 <h3 *ngIf="editMode">Edit {{ recipe?.name }}</h3>
 <h3 *ngIf="!editMode">New recipe</h3>
+
+<form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <div class="row">
+        <div class="col-sm-12 form-group">
+            <label for="name">Name</label>
+            <input ngModel name="name" type="text" id="name" class="form-control" value="Beer" #nameInput>
+        </div>
+        <div class="col-sm-12 form-group">
+            <label for="description">Description</label>
+            <textarea ngModel name="description" rows="10" cols="100" id="description" class="form-control" #descriptionInput></textarea>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
+    </div>
+</form>

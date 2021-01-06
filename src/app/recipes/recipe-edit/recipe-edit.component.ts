@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeService } from 'src/app/services/recipe.service';
@@ -26,4 +27,8 @@ export class RecipeEditComponent implements OnInit {
     )
   }
 
+  onSubmit(form: NgForm) {
+    console.log(form);
+    
+  }
 }

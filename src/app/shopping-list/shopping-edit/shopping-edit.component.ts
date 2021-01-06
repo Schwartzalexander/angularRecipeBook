@@ -35,4 +35,5 @@ export class ShoppingEditComponent implements OnInit {
     this.itemEdited.emit(ingredient)
     this.dataSerive.subject.next("The edit shopping list button was clicked, milord")
   }
+
 }
