@@ -1,7 +1,7 @@
 <h3 *ngIf="editMode">Edit {{ recipe?.name }}</h3>
 <h3 *ngIf="!editMode">New recipe</h3>
 
-<form (ngSubmit)="onSubmit()" #f="ngForm">
+<form (ngSubmit)="onSubmit()" #recipeForm="ngForm">
     <div class="row">
         <div class="col-sm-12 form-group">
             <label for="name">Name</label>
@@ -37,7 +37,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <button class="btn btn-success" [disabled]="!f.valid" type="submit">Save</button>
+                <button class="btn btn-success" [disabled]="!recipeForm.valid" type="submit">Save</button>
             </div>
         </div>
     </div>

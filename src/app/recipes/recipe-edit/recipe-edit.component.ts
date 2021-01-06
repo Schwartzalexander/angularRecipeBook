@@ -14,7 +14,7 @@ export class RecipeEditComponent implements OnInit {
   editMode = false;
   recipe: Recipe | undefined
 
-  @ViewChild('f') recipeForm: NgForm | undefined
+  @ViewChild('recipeForm') recipeForm: NgForm | undefined
 
   // select options
   poisonLevelOptions = ['No', 'A little', 'Only to my enemies', 'Yes, ma\'am']
