@@ -32,8 +32,6 @@ export class RecipeService {
       [])
   ]
 
-  recipeSelectionEventEmitter = new EventEmitter<Recipe>()
-
   constructor() { }
 
 }

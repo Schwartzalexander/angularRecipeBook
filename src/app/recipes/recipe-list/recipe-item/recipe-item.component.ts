@@ -24,9 +24,4 @@ export class RecipeItemComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  onClick() {
-    this.recipeService.recipeSelectionEventEmitter.emit(this.recipe)
-    this.loggingService.log(this.recipe); 
-  }
 }

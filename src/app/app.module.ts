@@ -25,6 +25,7 @@ import { DataService } from './services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Error404Component } from './error-pages/error404/error404.component';
 import { NoRecipeShownComponent } from './recipes/no-recipe-shown/no-recipe-shown.component';
+import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { NoRecipeShownComponent } from './recipes/no-recipe-shown/no-recipe-show
     UnlessDirective,
     DropdownDirective,
     Error404Component,
-    NoRecipeShownComponent
+    NoRecipeShownComponent,
+    RecipeEditComponent
   ],
   imports: [
     BrowserModule,
