@@ -3,13 +3,13 @@
 
 <form (ngSubmit)="onSubmit()" #f="ngForm">
     <div class="row">
-        <div class="col-sm-12 form-group" ngModelGroup="textValues">
+        <div class="col-sm-12 form-group">
             <label for="name">Name</label>
             <input ngModel name="name" type="text" id="name" [ngModel]="defaultName" class="form-control" #nameInput
                 required #name="ngModel">
             <p class="help-block" *ngIf="!name.valid && name.touched">Please enter a name.</p>
         </div>
-        <div class="col-sm-12 form-group" ngModelGroup="textValues">
+        <div class="col-sm-12 form-group">
             <label for="description">Description</label>
             <textarea ngModel name="description" rows="10" cols="100" id="description" [ngModel]="defaultDescription"
                 class="form-control" #description="ngModel" [(ngModel)]="descriptionValue" required maxlength="10000"></textarea>
@@ -22,17 +22,17 @@
                 #imagePathInput>
         </div>
         <div class="col-sm-12 form-group">
-            <label for="poisonous">Poisonous</label>
-            <select id="poisonous" class="form-control" [ngModel]="defaultPoisonous" name="poisonous" required
-                #poisonous="ngModel">
-                <option [value]="poisonous" *ngFor="let poisonous of poisonousOptions">{{poisonous}}</option>
+            <label for="poisonLevel">Poisonous</label>
+            <select id="poisonLevel" class="form-control" [ngModel]="defaultPoisonLevel" name="poisonLevel" required
+                #poisonLevel="ngModel">
+                <option [value]="poisonLevel" *ngFor="let poisonLevel of poisonLevelOptions">{{poisonLevel}}</option>
             </select>
-            <p class="help-block" *ngIf="!poisonous.valid && poisonous.touched">Please select the poison level.</p>
+            <p class="help-block" *ngIf="!poisonLevel.valid && poisonLevel.touched">Please select the poison level.</p>
         </div>
         <div class="col-sm-12 form-group">
             <label for="rating">Rating</label>
-            <div class="radio" id="rating" *ngFor="let ratingOption of ratingOptions">
-                <input type="radio" name="rating" ngModel [value]="ratingOption" required [ngModel]="defaultRating"> {{ratingOption}}
+            <div class="radio" id="rating" *ngFor="let ratingOption of ratingOptions, index as i">
+                <input type="radio" name="rating" id="{{i}}" value="{{i}}" ngModel [value]="ratingOption" required [ngModel]="defaultRating"> {{ratingOption}}
             </div>            
         </div>
         <div class="row">

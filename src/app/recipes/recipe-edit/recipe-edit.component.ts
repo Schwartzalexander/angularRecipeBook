@@ -17,7 +17,7 @@ export class RecipeEditComponent implements OnInit {
   @ViewChild('f') recipeForm: NgForm | undefined
 
   // select options
-  poisonousOptions = ['No', 'A little', 'Only to my enemies', 'Yes, ma\'am']
+  poisonLevelOptions = ['No', 'A little', 'Only to my enemies', 'Yes, ma\'am']
   // radio options
   ratingOptions = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
 
@@ -26,11 +26,12 @@ export class RecipeEditComponent implements OnInit {
   defaultName = "Krautknödel"
   defaultDescription = "Nur für echte Deutsche. Alle anderen furzen vom Kraut."
   defaultImagePath = "https://ais.kochbar.de/kbrezept/109581_1009663/1200x1200/rumaenische-krautwickel-sarmale-rezept-bild-nr-2.jpg"
-  defaultPoisonous = this.poisonousOptions[2]
+  defaultPoisonLevel = this.poisonLevelOptions[2]
   defaultRating = this.ratingOptions[4]
 
   //Two-way-bound values
-  descriptionValue : string | undefined = this.defaultDescription
+  descriptionValue: string | undefined = this.defaultDescription
+
   constructor(private activeRoute: ActivatedRoute, private recipeService: RecipeService) { }
 
   ngOnInit(): void {
@@ -49,6 +50,13 @@ export class RecipeEditComponent implements OnInit {
   // }
 
   onSubmit() {
-    console.log(this.recipeForm) 
+    console.log(this.recipeForm)
+    let name = this.recipeForm?.value.name
+    let description = this.recipeForm?.value.description
+    let imagePath = this.recipeForm?.value.imagePath
+    let poisonLevel = this.recipeForm?.value.poisonLevel
+    let rating = this.recipeForm?.value.rating
+    let recipe = new Recipe(name, description, imagePath, [], poisonLevel, rating)
+    this.recipeService.recipes.push(recipe)
   }
 }
