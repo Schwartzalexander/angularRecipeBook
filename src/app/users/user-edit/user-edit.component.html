@@ -1,6 +1,50 @@
 <h3 *ngIf="editMode">Edit {{ user?.name }}</h3>
 <h3 *ngIf="!editMode">New user</h3>
 
-<form (ngSubmit)="onSubmit()" #userForm="ngForm">
-
+<form  [formGroup]="userForm">
+    <div class="row">
+        <div class="col-sm-12 form-group">
+            <label for="name">Name</label>
+            <input
+                type="text"
+                id="name" 
+                formControlName="name"
+                class="form-control">
+            <p class="help-block" *ngIf="!name.valid && name.touched">Please enter a name.</p>
+        </div>
+        <div class="col-sm-12 form-group">
+            <label for="email">Email</label>
+            <input
+                type="text"
+                id="email"
+                formControlName="email"
+                class="form-control">
+            <p class="help-block" *ngIf="!email.valid && email.touched">Please enter an email address.</p>
+        </div>        
+        <div class="col-sm-12 form-group">
+            <label for="password">Password</label>
+            <input
+                type="text"
+                id="password"
+                formControlName="password"
+                class="form-control">
+            <p class="help-block" *ngIf="!password.valid && password.touched">Please enter password.</p>
+        </div>
+        <div class="col-sm-12 form-group">
+            <label for="gender">Gender</label>
+            <div class="radio" id="gender" *ngFor="let genderOption of genderOptions">
+                <input 
+                    type="radio"
+                    formControlName="gender"
+                    [value]="genderOption">{{genderOption}}
+            </div>            
+        </div>
+      
+       
+        <div class="row">
+            <div class="col-xs-12">
+                <button class="btn btn-success" type="submit">Save</button>
+            </div>
+        </div>
+    </div>
 </form>
