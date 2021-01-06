@@ -10,11 +10,9 @@ import { ShoppingService } from './services/shopping.service';
 })
 export class AppComponent implements AfterContentInit {
 
-  page : string = 'recipes'
   lastAddedIngredient : Ingredient | undefined
   
   title = 'Angular Recipe Book';
-  // @ContentChild('contentFooter', {static: true}) footer : ElementRef;
 
   constructor(private loggingService: LoggingService, private shoppingService : ShoppingService) {}
   
@@ -24,12 +22,6 @@ export class AppComponent implements AfterContentInit {
         this.lastAddedIngredient = ingredient
       }
     )
-  }
-
-  changePage(event : any) {
-    this.loggingService.log(event.name);
-    this.page = event.name
-    
   }
 }
 
