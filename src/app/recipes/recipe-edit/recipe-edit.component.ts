@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from 'src/app/model/recipe.model';
 import { RecipeService } from 'src/app/services/recipe.service';
 
@@ -32,7 +32,8 @@ export class RecipeEditComponent implements OnInit {
   //Two-way-bound values
   descriptionValue: string | undefined = this.defaultDescription
 
-  constructor(private activeRoute: ActivatedRoute, private recipeService: RecipeService) { }
+  constructor(private activeRoute: ActivatedRoute, private recipeService: RecipeService, private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.activeRoute.params.subscribe(
@@ -58,5 +59,8 @@ export class RecipeEditComponent implements OnInit {
     let rating = this.recipeForm?.value.rating
     let recipe = new Recipe(name, description, imagePath, [], poisonLevel, rating)
     this.recipeService.recipes.push(recipe)
+    this.recipeForm?.reset()
+    let index = this.recipeService.recipes.length - 1
+    this.router.navigate(["..", index], { relativeTo: this.route })
   }
 }
