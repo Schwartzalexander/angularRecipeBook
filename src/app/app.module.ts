@@ -26,6 +26,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Error404Component } from './error-pages/error404/error404.component';
 import { NoRecipeShownComponent } from './recipes/no-recipe-shown/no-recipe-shown.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
+import { OberservablesComponent } from './oberservables/oberservables.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component
     DropdownDirective,
     Error404Component,
     NoRecipeShownComponent,
-    RecipeEditComponent
+    RecipeEditComponent,
+    OberservablesComponent
   ],
   imports: [
     BrowserModule,

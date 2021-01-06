@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { Error404Component } from "./error-pages/error404/error404.component";
 import { GameComponent } from "./footer/game/game.component";
+import { OberservablesComponent } from "./oberservables/oberservables.component";
 import { NoRecipeShownComponent } from "./recipes/no-recipe-shown/no-recipe-shown.component";
 import { RecipeDetailComponent } from "./recipes/recipe-detail/recipe-detail.component";
 import { RecipeEditComponent } from "./recipes/recipe-edit/recipe-edit.component";
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
   },
   { path: 'shoppingList', component: ShoppingListComponent },
   { path: 'stupid-game', component: GameComponent },
+  { path: 'oberservables', component: OberservablesComponent },
   { path: 'not-found', component: Error404Component, data: { message: 'Page not found!' } },
   { path: '**', redirectTo: '/not-found' }
 ]
