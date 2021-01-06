@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Recipe } from 'src/app/model/recipe.model';
 import { DataService } from 'src/app/services/data.service';
 import { LoggingService } from 'src/app/services/logging.service';
@@ -12,14 +13,21 @@ import { ShoppingService } from 'src/app/services/shopping.service';
 })
 export class RecipeDetailComponent implements OnInit {
 
-  @Input('recipe') recipe: Recipe | undefined
+  recipe: Recipe | undefined
+  id : number | undefined
 
-  constructor(private dataService: DataService, private loggingService: LoggingService, private recipeService: RecipeService, private shoppingService: ShoppingService) {
+  constructor(private dataService: DataService, private loggingService: LoggingService, private recipeService: RecipeService, private shoppingService: ShoppingService, private activeRoute: ActivatedRoute) {
 
     this.dataService.eventEmitter.subscribe((message: string) => this.reactToEventFromService(message))
   }
 
   ngOnInit(): void {
+    this.activeRoute.params.subscribe(
+      (params) => {
+        this.id = +params['id']
+        this.recipe = this.recipeService.recipes[this.id]
+      }
+    )
   }
 
   /**

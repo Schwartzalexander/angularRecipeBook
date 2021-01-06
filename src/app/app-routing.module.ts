@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { Error404Component } from "./error-pages/error404/error404.component";
 import { GameComponent } from "./footer/game/game.component";
+import { NoRecipeShownComponent } from "./recipes/no-recipe-shown/no-recipe-shown.component";
 import { RecipeDetailComponent } from "./recipes/recipe-detail/recipe-detail.component";
 import { RecipeListComponent } from "./recipes/recipe-list/recipe-list.component";
 import { RecipesComponent } from "./recipes/recipes.component";
@@ -11,6 +12,7 @@ const appRoutes: Routes = [
   { path: '', redirectTo: 'recipes', pathMatch: 'full' },
   {
     path: 'recipes', component: RecipesComponent, children: [
+      { path: '', component: NoRecipeShownComponent },
       { path: ':id', component: RecipeDetailComponent }
       // {path: 'edit/:id', component: RecipeEditComponent}
     ]

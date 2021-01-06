@@ -24,6 +24,7 @@ import { LoggingService } from './services/logging.service';
 import { DataService } from './services/data.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Error404Component } from './error-pages/error404/error404.component';
+import { NoRecipeShownComponent } from './recipes/no-recipe-shown/no-recipe-shown.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { Error404Component } from './error-pages/error404/error404.component';
     BestHighlightDirective,
     UnlessDirective,
     DropdownDirective,
-    Error404Component
+    Error404Component,
+    NoRecipeShownComponent
   ],
   imports: [
     BrowserModule,

@@ -10,8 +10,6 @@ import { RecipeService } from '../services/recipe.service';
 })
 export class RecipesComponent implements OnInit {
 
-  shownRecipe : Recipe | undefined
-
   constructor(private loggingService: LoggingService, private recipeService : RecipeService) {}
 
   ngOnInit(): void {
