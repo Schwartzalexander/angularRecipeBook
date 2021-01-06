@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Recipe } from 'src/app/model/recipe.model';
 import { DataService } from 'src/app/services/data.service';
 import { LoggingService } from 'src/app/services/logging.service';
@@ -11,14 +12,16 @@ import { ShoppingService } from 'src/app/services/shopping.service';
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.css']
 })
-export class RecipeDetailComponent implements OnInit {
+export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   recipe: Recipe | undefined
-  id : number | undefined
+  id: number | undefined
+
+  dataServiceSubscription: Subscription | undefined
 
   constructor(private dataService: DataService, private loggingService: LoggingService, private recipeService: RecipeService, private shoppingService: ShoppingService, private activeRoute: ActivatedRoute) {
 
-    this.dataService.eventEmitter.subscribe((message: string) => this.reactToEventFromService(message))
+    this.dataServiceSubscription = this.dataService.eventEmitter.subscribe((message: string) => this.reactToEventFromService(message))
   }
 
   ngOnInit(): void {
@@ -28,6 +31,13 @@ export class RecipeDetailComponent implements OnInit {
         this.recipe = this.recipeService.recipes[this.id]
       }
     )
+  }
+
+  ngOnDestroy(): void {
+    // The subscription could be destroyed here, but if we did that, it wouldn't do anything at all.
+    // To show the effect (receive an event), we must switch to the shopping list and 
+    // therefor destroy this component.
+    //this.dataServiceSubscription?.unsubscribe()
   }
 
   /**

@@ -1,4 +1,5 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { LoggingService } from './logging.service';
 
 @Injectable({
@@ -8,6 +9,6 @@ export class DataService {
 
   constructor(private loggingService : LoggingService) { }
 
-  eventEmitter = new EventEmitter<string>()
+  eventEmitter = new Subject<string>()
   
 }
