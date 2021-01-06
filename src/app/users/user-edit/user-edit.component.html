@@ -1,7 +1,7 @@
 <h3 *ngIf="editMode">Edit {{ user?.name }}</h3>
 <h3 *ngIf="!editMode">New user</h3>
 
-<form  [formGroup]="userForm">
+<form (ngSubmit)="onSubmit()" [formGroup]="userForm">
     <div class="row">
         <div class="col-sm-12 form-group">
             <label for="name">Name</label>
@@ -29,11 +29,14 @@
         </div>
         <div class="col-sm-12 form-group">
             <label for="gender">Gender</label>
-            <div class="radio" id="gender" *ngFor="let genderOption of genderOptions">
-                <input 
-                    type="radio"
-                    formControlName="gender"
-                    [value]="genderOption">{{genderOption}}
+            <div class="radio" *ngFor="let genderOption of genderOptions">
+                <label for="{{genderOption}}">
+                    <input 
+                        id="{{genderOption}}"
+                        type="radio"
+                        formControlName="gender"
+                        [value]="genderOption">   
+                {{genderOption}}</label>
             </div>            
         </div>
        

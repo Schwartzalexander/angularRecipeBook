@@ -12,7 +12,8 @@
         <div class="col-sm-12 form-group">
             <label for="description">Description</label>
             <textarea ngModel name="description" rows="10" cols="100" id="description" [ngModel]="defaultDescription"
-                class="form-control" #description="ngModel" [(ngModel)]="descriptionValue" required maxlength="10000"></textarea>
+                class="form-control" #description="ngModel" [(ngModel)]="descriptionValue" required
+                maxlength="10000"></textarea>
             <p class="help-block" *ngIf="description.valid">{{descriptionValue}}</p>
 
         </div>
@@ -32,8 +33,12 @@
         <div class="col-sm-12 form-group">
             <label for="rating">Rating</label>
             <div class="radio" id="rating" *ngFor="let ratingOption of ratingOptions, index as i">
-                <input type="radio" name="rating" id="{{i}}" value="{{i}}" ngModel [value]="ratingOption" required [ngModel]="defaultRating"> {{ratingOption}}
-            </div>            
+                <label for="{{i}}">
+                    <input type="radio" name="rating" id="{{i}}" value="{{i}}" ngModel [value]="ratingOption" required
+                        [ngModel]="defaultRating">
+                    {{ratingOption}}</label>
+
+            </div>
         </div>
         <div class="row">
             <div class="col-xs-12">
