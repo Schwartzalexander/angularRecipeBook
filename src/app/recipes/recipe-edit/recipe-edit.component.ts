@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Recipe } from 'src/app/model/recipe.model';
@@ -14,6 +14,16 @@ export class RecipeEditComponent implements OnInit {
   editMode = false;
   recipe : Recipe | undefined
 
+  @ViewChild('f') recipeForm: NgForm |undefined
+
+  // select options
+  poisonousOptions = ['No','A little', 'Only to my enemies', 'Yes, ma\'am']
+
+  // Default values
+  defaultName = "Krautknödel"
+  defaultDescription = "Nur für echte Deutsche. Alle anderen furzen vom Kraut."
+  defaultImagePath = "https://ais.kochbar.de/kbrezept/109581_1009663/1200x1200/rumaenische-krautwickel-sarmale-rezept-bild-nr-2.jpg"
+  defaultPoisonous = this.poisonousOptions[2]
   constructor(private activeRoute: ActivatedRoute, private recipeService : RecipeService) { }
 
   ngOnInit(): void {
@@ -27,8 +37,12 @@ export class RecipeEditComponent implements OnInit {
     )
   }
 
-  onSubmit(form: NgForm) {
-    console.log(form);
-    
+  // onSubmit(form: NgForm) {
+  //   console.log(form);
+  // }
+
+  onSubmit() {
+    console.log(this.recipeForm)
+    console.log(this.defaultPoisonous)
   }
 }
