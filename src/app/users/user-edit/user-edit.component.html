@@ -59,13 +59,17 @@
     <div class="col-sm-12 form-group">
       <h4>Roles</h4>
       <button class="btn btn-default" type="button" (click)="onAddRole()">Add role</button>
-      <div class="form-group" formArrayName="roles" *ngFor="let role of getRoles().controls; index as i">
-        <input type="text" class="form-control" [formControlName]="i">
-        <button class="btn btn-default" type="button" (click)="onDeleteRole(i)"><span
-          class="glyphicon glyphicon-remove"></span> Remove
-        </button>
+      <div class="form-group" formArrayName="roles" *ngFor="let role of getRoles().controls; index as i"
+           style="margin-top: 10px">
+        <div class="col-xs-8">
+          <input type="text" class="form-control" [formControlName]="i">
+        </div>
+        <div class="col-xs-2">
+          <button class="btn btn-default" type="button" (click)="onDeleteRole(i)"><span
+            class="glyphicon glyphicon-remove"></span> Remove
+          </button>
+        </div>
         <p class="help-block" *ngIf="!role?.valid && role?.touched">Please enter a valid role.</p>
-        <p>{{role.value}}</p>
       </div>
     </div>
     <div class="col-sm-12 form-group">
