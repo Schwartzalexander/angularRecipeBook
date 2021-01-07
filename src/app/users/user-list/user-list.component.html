@@ -1,11 +1,11 @@
 <div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-success" [routerLink]="['new']">New user</button>
-    </div>
+  <div class="col-xs-12">
+    <button class="btn btn-success" [routerLink]="['new']">New user</button>
+  </div>
 </div>
 <hr>
 <div class="row">
-    <div class="col-xs-12">
-       <app-user-item *ngFor="let user of users; index as i" [user]="user" [id]="i"></app-user-item>
-    </div>
+  <div class="col-xs-12">
+    <app-user-item *ngFor="let user of users; index as i" [user]="user" [id]="i"></app-user-item>
+  </div>
 </div>
