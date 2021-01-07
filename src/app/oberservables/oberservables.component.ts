@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { interval, Observable, Operator, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators'
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {interval, Observable, Subscription} from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-oberservables',
@@ -9,71 +9,74 @@ import { filter, map } from 'rxjs/operators'
 })
 export class OberservablesComponent implements OnInit, OnDestroy {
 
-  private counterSubscription: Subscription | undefined
-  private customCounterSubscription: Subscription | undefined
-  count: number = 0
-  customCount: number = 0
-  customOperatedData: string = ''
-  customError: string = ''
-  constructor() { }
+  private counterSubscription: Subscription | undefined;
+  private customCounterSubscription: Subscription | undefined;
+  count = 0;
+  customCount = 0;
+  customOperatedData = '';
+  customError = '';
+
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.counterSubscription = interval(1000).subscribe(count => {
-      this.count = count
-      console.log(count)
-    })
+      this.count = count;
+      console.log(count);
+    });
 
     const customObervable = new Observable(observer => {
       // This is the code that sends the event
-      let count = 0
+      let count = 0;
       setInterval(() => {
-        observer.next(count)
+        observer.next(count);
 
         // Alternative functions
         // observer.error()
         // observer.complete()
-        if (count > 5)
-          observer.error(new Error('Count is bigger than 5. Stopping. I\'m outta here.'))
-        count++
-      }, 900)
+        if (count > 5) {
+          observer.error(new Error('Count is bigger than 5. Stopping. I\'m outta here.'));
+        }
+        count++;
+      }, 900);
 
       // Note: The observable will never reach 7, because it stops at 6, when it throws an error.
-      if (count == 7) {
-        observer.complete()
+      if (count === 7) {
+        observer.complete();
       }
-    })
+    });
 
     // Apply a filter, which filters out all odd values and map all numbers to 'Round: '+(number+1)
-    let operatedObserver = customObervable.pipe(filter(data => {
-      return <number><any>data % 2 == 0
-    }),
+    const operatedObserver = customObervable.pipe(filter(data => {
+        return data as any as number % 2 === 0;
+      }),
       map(data => {
-        return 'Round: ' + (<number>data + 1)
+        return 'Round: ' + (data as number + 1);
       }));
 
     this.customCounterSubscription = customObervable.subscribe(data => {
       // this is, what happens, when a new event is received
-      this.customCount = <number><any>data;
+      this.customCount = data as any as number;
     }, error => {
-      this.customError = (<Error>error).message
+      this.customError = (error as Error).message;
     }, () => {
       // Completed
       console.log('Completed');
-    })
+    });
 
     operatedObserver.subscribe(data => {
       // this is, what happens, when a new event is received
-      this.customOperatedData = <string>data;
+      this.customOperatedData = data as string;
     }, error => {
-      this.customError = (<Error>error).message
+      this.customError = (error as Error).message;
     }, () => {
       // Completed
       console.log('Completed');
-    })
+    });
   }
 
   ngOnDestroy(): void {
-    this.counterSubscription?.unsubscribe()
-    this.customCounterSubscription?.unsubscribe()
+    this.counterSubscription?.unsubscribe();
+    this.customCounterSubscription?.unsubscribe();
   }
 }

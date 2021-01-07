@@ -1,48 +1,53 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Ingredient } from 'src/app/model/ingredient.model';
-import { DataService } from 'src/app/services/data.service';
-import { LoggingService } from 'src/app/services/logging.service';
-import { ShoppingService } from 'src/app/services/shopping.service';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {NgForm} from '@angular/forms';
+import {Ingredient} from 'src/app/model/ingredient.model';
+import {DataService} from 'src/app/services/data.service';
+import {LoggingService} from 'src/app/services/logging.service';
+import {ShoppingService} from 'src/app/services/shopping.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-shopping-edit',
   templateUrl: './shopping-edit.component.html',
   styleUrls: ['./shopping-edit.component.css']
 })
-export class ShoppingEditComponent implements OnInit {
+export class ShoppingEditComponent implements OnInit, OnDestroy {
 
-  @Output('itemEditedSuperBindingNAME') itemEdited = new EventEmitter<{ name: string, amount: number }>()
- 
-
-  @ViewChild('shoppingForm') shoppingForm: NgForm | undefined
+  @ViewChild('shoppingForm') shoppingForm: NgForm | undefined;
+  id: number | undefined;
+  editMode = false;
 
   // Default values
-  defaultName = "Beer"
-  defaulAmount = 20
+  defaultName = 'Beer';
+  defaultAmount = 20;
 
-  constructor(private loggingService: LoggingService, private dataSerive : DataService, private shoppingService : ShoppingService) {}
+  subscription: Subscription | undefined;
+
+  constructor(private loggingService: LoggingService, private dataService: DataService, private shoppingService: ShoppingService) {
+  }
 
   ngOnInit(): void {
+    this.subscription = this.shoppingService.clickOnIngredientSubject.subscribe(id => {
+      this.id = id;
+      this.editMode = true;
+    });
   }
 
-  onAddClicked() {
-    let name = this.shoppingForm?.value.name
-    let amount = this.shoppingForm?.value.amount
-    
-    const ingredient = new Ingredient(name, parseInt(amount))
-    this.shoppingService.ingredients.push(ingredient)
-
-    this.shoppingForm?.reset() 
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
-  
-  onEditClicked(nameInput: HTMLInputElement, amountInput: HTMLInputElement) {
-    if (this.nameInput === undefined || this.amountInput === undefined)
-      return;
-    const ingredient = new Ingredient(this.nameInput.nativeElement.value, this.amountInput.nativeElement.value)
-    this.itemEdited.emit(ingredient)
-    this.dataSerive.subject.next("The edit shopping list button was clicked, milord")
+  onAddClicked(): void {
+    const name = this.shoppingForm?.value.name;
+    const amount = this.shoppingForm?.value.amount;
+
+    const ingredient = new Ingredient(name, parseInt(amount, 0));
+    this.shoppingService.ingredients.push(ingredient);
+
+    this.shoppingForm?.reset();
+  }
+
+  onEditClicked(nameInput: HTMLInputElement, amountInput: HTMLInputElement): void {
   }
 
 }

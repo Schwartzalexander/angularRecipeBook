@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Ingredient } from '../model/ingredient.model';
-import { LoggingService } from '../services/logging.service';
-import { ShoppingService } from '../services/shopping.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Ingredient} from '../model/ingredient.model';
+import {LoggingService} from '../services/logging.service';
+import {ShoppingService} from '../services/shopping.service';
 
 @Component({
   selector: 'app-shopping-list',
@@ -10,24 +10,27 @@ import { ShoppingService } from '../services/shopping.service';
 })
 export class ShoppingListComponent implements OnInit {
   @Output() itemAdded = new EventEmitter<Ingredient>();
-  @Output() itemEdited = new EventEmitter<Ingredient>();;
+  @Output() itemEdited = new EventEmitter<Ingredient>();
 
-  ingredients: Ingredient[] | undefined
+  ingredients: Ingredient[] | undefined;
 
-  constructor(private loggingService: LoggingService, private shoppingService : ShoppingService) { }
+  constructor(private loggingService: LoggingService, private shoppingService: ShoppingService) {
+  }
 
   ngOnInit(): void {
-    this.ingredients=this.shoppingService.ingredients
+    this.ingredients = this.shoppingService.ingredients;
   }
 
-  onItemAdded(ingredient: Ingredient) {
-   this.shoppingService.addIngredient(ingredient)
+  onItemAdded(ingredient: Ingredient): void {
+    this.shoppingService.addIngredient(ingredient);
   }
 
-  onItemEdited(ingredient: Ingredient) {
-    this.loggingService.log("The item " + ingredient + " was edited, dude. Sincerly, your shopping-list.")
-    this.itemEdited.emit(ingredient)
+  onItemEdited(ingredient: Ingredient): void {
+    this.loggingService.log('The item ' + ingredient + ' was edited, dude. Sincerly, your shopping-list.');
+    this.itemEdited.emit(ingredient);
   }
 
-
+  onListItemClicked(index: number): void {
+    this.shoppingService.clickOnIngredientSubject.next(index);
+  }
 }

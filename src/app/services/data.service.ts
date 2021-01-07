@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { LoggingService } from './logging.service';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
+import {LoggingService} from './logging.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  constructor(private loggingService : LoggingService) { }
+  constructor(private loggingService: LoggingService) {
+  }
 
-  subject = new Subject<string>()
-  
+  subject = new Subject<string>();
+
 }

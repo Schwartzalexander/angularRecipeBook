@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Ingredient } from '../model/ingredient.model';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs';
+import {Ingredient} from '../model/ingredient.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,20 +12,23 @@ export class ShoppingService {
     new Ingredient('Flour', 2),
     new Ingredient('Chicken', 1),
     new Ingredient('Fish dicks', 12)
-  ]
+  ];
 
-  ingredientAddedSubject = new Subject<Ingredient>()
+  ingredientAddedSubject = new Subject<Ingredient>();
 
-  constructor() { }
+  clickOnIngredientSubject = new Subject<number>();
 
-  addIngredient(ingredient: Ingredient) {
-    this.ingredients.push(ingredient)
-    this.ingredientAddedSubject.next(ingredient)
+  constructor() {
   }
 
-  deleteIngredient(ingredient: Ingredient) {
-    let index = this.ingredients.indexOf(ingredient)
-    this.ingredients.splice(index, 1)
+  addIngredient(ingredient: Ingredient): void {
+    this.ingredients.push(ingredient);
+    this.ingredientAddedSubject.next(ingredient);
+  }
+
+  deleteIngredient(ingredient: Ingredient): void {
+    const index = this.ingredients.indexOf(ingredient);
+    this.ingredients.splice(index, 1);
   }
 
 }
