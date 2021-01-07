@@ -41,12 +41,26 @@ export class UserEditComponent implements OnInit {
           this.user = this.userService.users[this.id]
       }
     )
-    this.userForm.valueChanges.subscribe(
-      (value) => console.log(value)      
-    )
-    this.userForm.statusChanges.subscribe(
-      (status) => console.log(status)      
-    )
+    // this.userForm?.valueChanges.subscribe(
+    //   (value) => console.log(value)      
+    // )
+    // this.userForm?.statusChanges.subscribe(
+    //   (status) => console.log(status)      
+    // )
+
+    // this.userForm?.setValue( {
+    //   'name' : 'Werner',
+    //   'email' : 'werner@siemens.de',
+    //   'password' : '3h9c78438974',
+    //   'gender' : 'transsex man to female',
+    //   'roles' : ['spack', 'fanboy']
+    // })
+
+    // this.userForm?.patchValue( {
+    //   'name' : 'Wernherr'
+    // })
+
+    // this.userForm.reset()
   }
 
   createForm(): FormGroup {
