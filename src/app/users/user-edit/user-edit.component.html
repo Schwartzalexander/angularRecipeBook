@@ -67,6 +67,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <button class="btn btn-success" [disabled]="!userForm?.valid" type="submit">Save</button>
+                <p class="help-block" *ngIf="userForm.pending">Note: Form validation is pending</p>
             </div>
         </div>
     </div>
