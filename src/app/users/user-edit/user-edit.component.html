@@ -10,7 +10,10 @@
                 id="name" 
                 formControlName="name"
                 class="form-control">            
-                <p class="help-block" *ngIf="!userForm.get('name')?.valid && userForm.get('name')?.touched">Please enter a name.</p>
+                <span class="help-block" *ngIf="!userForm.get('name')?.valid && userForm.get('name')?.touched">
+                    <p class="help-block" *ngIf="userForm.get('name').getError('nameIsForbidden')">This name is forbidden.</p>
+                    <p class="help-block" *ngIf="userForm.get('name').getError('required')">Please enter a name.</p>
+                </span>
         </div>
         <div class="col-sm-12 form-group">
             <label for="email">Email</label>

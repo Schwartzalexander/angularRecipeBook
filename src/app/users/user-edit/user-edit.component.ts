@@ -14,6 +14,7 @@ export class UserEditComponent implements OnInit {
   editMode = false;
   user: User | undefined
   userForm: FormGroup = this.createForm()
+  public forbiddenUsernames = ['erSch', 'Admin']
 
   // radio options
   genderOptions = ['male', 'female', 'transsex', 'transgender', 'söder', 'transsex man to female', 'guy with small dick']
@@ -42,7 +43,7 @@ export class UserEditComponent implements OnInit {
 
   createForm(): FormGroup {
     return new FormGroup({
-      'name': new FormControl("Anna", Validators.required),
+      'name': new FormControl("Anna", [Validators.required, this.forbiddenNames]),
       'email': new FormControl("anna@aSchwartz.de", [Validators.required, Validators.email]),
       'password': new FormControl("456456456654", [Validators.required, Validators.minLength(8)]),
       'gender': new FormControl("female", Validators.required),
@@ -50,7 +51,7 @@ export class UserEditComponent implements OnInit {
     });
   }
 
-  getRoles() : FormArray {
+  getRoles(): FormArray {
     return this.userForm.get('roles') as FormArray;
   }
 
@@ -59,7 +60,7 @@ export class UserEditComponent implements OnInit {
     this.getRoles().push(control)
   }
 
-  onDeleteRole(i: number){
+  onDeleteRole(i: number) {
     this.getRoles().removeAt(i)
   }
 
@@ -75,5 +76,14 @@ export class UserEditComponent implements OnInit {
     this.userForm?.reset()
     let index = this.userService.users.length - 1
     this.router.navigate(["..", index], { relativeTo: this.route })
+  }
+
+  forbiddenNames(control: FormControl): { [s: string]: boolean } | null {
+    const forbiddenUsernames = ['ersch', 'admin']
+
+    if (forbiddenUsernames.indexOf((control.value as string).toLowerCase()) !== -1) {
+      return { 'nameIsForbidden': true };
+    }
+    return null;
   }
 }
