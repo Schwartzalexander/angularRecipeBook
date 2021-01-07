@@ -15,7 +15,6 @@ export class UserEditComponent implements OnInit {
   id: number | undefined
   editMode = false;
   user: User | undefined
-  userForm: FormGroup = this.createForm()
   public forbiddenUsernames = ['erSch', 'Admin']
 
   // radio options
@@ -27,7 +26,9 @@ export class UserEditComponent implements OnInit {
   defaultEmail = "hansi@vogelpark.de"
   defaultPassword = "quietschpfiff"
   defaultGender = this.genderOptions[3]
+  defaultRoles = ['admin', 'boss']
 
+  userForm: FormGroup = this.createForm()
 
   constructor(private activeRoute: ActivatedRoute, private userService: UserService, private router: Router,
     private route: ActivatedRoute) { }
@@ -41,14 +42,20 @@ export class UserEditComponent implements OnInit {
           this.user = this.userService.users[this.id]
       }
     )
+    this.userForm.valueChanges.subscribe(
+      (value) => console.log(value)      
+    )
+    this.userForm.statusChanges.subscribe(
+      (status) => console.log(status)      
+    )
   }
 
   createForm(): FormGroup {
     return new FormGroup({
-      'name': new FormControl("Anna", [Validators.required, this.forbiddenNames]),
-      'email': new FormControl("anna@aSchwartz.de", [Validators.required, Validators.email], [this.forbiddenEmails]),
-      'password': new FormControl("456456456654", [Validators.required, Validators.minLength(8)]),
-      'gender': new FormControl("female", Validators.required),
+      'name': new FormControl(this.defaultName, [Validators.required, this.forbiddenNames]),
+      'email': new FormControl(this.defaultEmail, [Validators.required, Validators.email], [this.forbiddenEmails]),
+      'password': new FormControl(this.defaultPassword, [Validators.required, Validators.minLength(8)]),
+      'gender': new FormControl(this.defaultGender, Validators.required),
       'roles': new FormArray([])
     });
   }
@@ -95,7 +102,7 @@ export class UserEditComponent implements OnInit {
     const promise = new Promise<any>((resolve, reject) => {
       setTimeout(
         () => {
-          if (forbiddenUsernames.indexOf((control.value as string).toLowerCase()) !== -1) {
+          if (forbiddenUsernames.indexOf((control.value as string)?.toLowerCase()) !== -1) {
             resolve({ 'emailIsForbidden': true })
           }
           else {
