@@ -1,52 +1,98 @@
 <h3 *ngIf="editMode">Edit {{ recipe?.name }}</h3>
 <h3 *ngIf="!editMode">New recipe</h3>
 
-<form (ngSubmit)="onSubmit()" #recipeForm="ngForm">
-    <div class="row">
-        <div class="col-sm-12 form-group">
-            <label for="name">Name</label>
-            <input ngModel name="name" type="text" id="name" [ngModel]="defaultName" class="form-control" #nameInput
-                required #name="ngModel">
-            <p class="help-block" *ngIf="!name.valid && name.touched">Please enter a name.</p>
+<form (ngSubmit)="onSubmit()" [formGroup]="recipeForm" *ngIf="recipeForm !== undefined">
+  <div class="row">
+    <div class="col-sm-12 form-group">
+      <label for="name">Name</label>
+      <input
+        class="form-control"
+        formControlName="name"
+        id="name"
+        type="text">
+      <span *ngIf="!recipeForm?.get('name')?.valid && recipeForm?.get('name')?.touched" class="help-block">
+        <p *ngIf="recipeForm?.get('name')?.getError('required')" class="help-block">Please enter a name.</p>
+      </span>
+    </div>
+    <div class="col-sm-12 form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control"
+                cols="100"
+                formControlName="description" id="description" rows="10">{{descriptionValue}}</textarea>
+      <p *ngIf="recipeForm?.get('description')?.valid && recipeForm?.get('description')?.touched"
+         class="help-block">Please enter a
+        description.</p>
+    </div>
+    <div class="col-sm-12 form-group">
+      <label for="imagePath">Image path</label>
+      <input
+        class="form-control"
+        formControlName="imagePath"
+        id="imagePath"
+        type="text">
+      <span *ngIf="!recipeForm?.get('imagePath')?.valid && recipeForm?.get('imagePath')?.touched" class="help-block">
+        <p *ngIf="recipeForm?.get('imagePath')?.getError('required')" class="help-block">Please enter an imagePath.</p>
+      </span>
+      <div class="row">
+        <div class="col-xs-12">
+          <img src="" class="img-responsive">
         </div>
-        <div class="col-sm-12 form-group">
-            <label for="description">Description</label>
-            <textarea ngModel name="description" rows="10" cols="100" id="description" [ngModel]="defaultDescription"
-                class="form-control" #description="ngModel" [(ngModel)]="descriptionValue" required
-                maxlength="10000"></textarea>
-            <p class="help-block" *ngIf="description.valid">{{descriptionValue}}</p>
+      </div>
+    </div>
+    <div class="col-sm-12 form-group">
+      <label for="poisonLevel">Poison level</label>
+      <select class="form-control" formControlName="poisonLevel" id="poisonLevel">
+        <option *ngFor="let poisonLevelOption of poisonLevelOptions"
+                [value]="poisonLevelOption.value">{{poisonLevelOption.name}}</option>
+      </select>
+      <p *ngIf="!recipeForm?.get('poisonLevel')?.valid && recipeForm?.get('poisonLevel')?.touched" class="help-block">
+        Please select the poison level.</p>
+    </div>
+    <div class="col-sm-12 form-group">
+
+      <label>Rating</label>
+      <div *ngFor="let ratingOption of ratingOptions" class="radio">
+        <label for="{{ratingOption.value}}">
+          <input
+            [value]="ratingOption.value"
+            formControlName="rating"
+            id="{{ratingOption.value}}"
+            type="radio">
+          {{ratingOption.name}}</label>
+      </div>
+      <p *ngIf="!recipeForm?.get('rating')?.valid && recipeForm?.get('rating')?.touched" class="help-block">Please rate
+        your recipe.</p>
+    </div>
+    <div class="col-sm-12 form-group" id="ingredients">
+      <h4>Ingredients</h4>
+      <button (click)="onAddIngredient()" class="btn btn-default" type="button">Add ingredient</button>
+      <div formArrayName="ingredients">
+        <div class="row" [formGroupName]="i"
+             *ngFor="let ingredientControl of getIngredients().controls; index as i">
+          <div class="col-xs-8">
+            <input class="form-control" type="text" formControlName="name">
+          </div>
+          <div class="col-xs-2">
+            <input class="form-control" type="number" formControlName="amount">
+          </div>
+          <div class="col-xs-2">
+            <button (click)="onDeleteIngredient(i)" class="btn btn-default" type="button">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+          </div>
+          <!--          <p *ngIf="!ingredientControl?.valid && ingredientControl?.touched" class="help-block">Please enter a valid-->
+          <!--            ingredient.</p>-->
 
         </div>
-        <div class="col-sm-12 form-group">
-            <label for="imagePath">Image path</label>
-            <input ngModel name="imagePath" type="text" id="imagePath" [ngModel]="defaultImagePath" class="form-control"
-                #imagePathInput>
-        </div>
-        <div class="col-sm-12 form-group">
-            <label for="poisonLevel">Poisonous</label>
-            <select id="poisonLevel" class="form-control" [ngModel]="defaultPoisonLevel" name="poisonLevel" required
-                #poisonLevel="ngModel">
-                <option [value]="poisonLevel" *ngFor="let poisonLevel of poisonLevelOptions">{{poisonLevel}}</option>
-            </select>
-            <p class="help-block" *ngIf="!poisonLevel.valid && poisonLevel.touched">Please select the poison level.</p>
-        </div>
-        <div class="col-sm-12 form-group">
-            <label for="rating">Rating</label>
-            <div class="radio" id="rating" *ngFor="let ratingOption of ratingOptions, index as i">
-                <label for="{{i}}">
-                    <input type="radio" name="rating" id="{{i}}" value="{{i}}" ngModel [value]="ratingOption" required
-                        [ngModel]="defaultRating">
-                    {{ratingOption}}</label>
-            </div>
-        </div>       
-        <div class="col-sm-12 form-group">
-            <h4>Ingredients</h4>
-            <button class="btn btn-default" type="button">Add ingredient</button>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <button class="btn btn-success" [disabled]="!recipeForm.valid" type="submit">Save</button>
-            </div>
-        </div>
+      </div>
+
     </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-success" [disabled]="!recipeForm?.valid"
+                type="submit">{{editMode ? 'Update' : 'Save'}}
+        </button>
+      </div>
+    </div>
+  </div>
 </form>

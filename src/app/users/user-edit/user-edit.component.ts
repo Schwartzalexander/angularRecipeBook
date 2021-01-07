@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { User } from 'src/app/model/user.model';
-import { UserService } from 'src/app/services/user.service';
+import {Component, OnInit} from '@angular/core';
+import {AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {User} from 'src/app/model/user.model';
+import {UserService} from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -11,41 +11,42 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
-  id: number | undefined
+  id: number | undefined;
   editMode = false;
-  user: User | undefined
+  user: User | undefined;
 
   // radio options
-  genderOptions = ['male', 'female', 'transsex', 'transgender', 'söder', 'transsex man to female', 'guy with small dick']
-coronaOptions = [{'value':'against', 'name': 'Against corona'},{'value':'for', 'name': 'For corona'}]
+  genderOptions = ['male', 'female', 'transsex', 'transgender', 'söder', 'transsex man to female', 'guy with small dick'];
+  coronaOptions = [{value: 'against', name: 'Against corona'}, {value: 'for', name: 'For corona'}];
 
   // Default values
-  defaultName = "Hansi"
-  defaultEmail = "hansi@vogelpark.de"
-  defaultPassword = "quietschpfiff"
-  defaultGender = this.genderOptions[3]
-  defaultRoles = ['admin', 'boss']
-  defaultCorona= [this.coronaOptions[0].value]
+  defaultName = 'Hansi';
+  defaultEmail = 'hansi@vogelpark.de';
+  defaultPassword = 'quietschpfiff';
+  defaultGender = this.genderOptions[3];
+  defaultRoles = ['admin', 'boss'];
+  defaultCorona = [this.coronaOptions[0].value];
 
-  userForm: FormGroup = this.createForm()
+  userForm: FormGroup = this.createForm();
 
   constructor(private activeRoute: ActivatedRoute, private userService: UserService, private router: Router,
-    private route: ActivatedRoute) { }
+              private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
     this.activeRoute.params.subscribe(
       (params) => {
-        this.id = +params['id']
-        this.editMode = params['id'] != null
+        this.id = +params.id;
+        this.editMode = params.id != null;
         if (this.editMode)
-          this.user = this.userService.users[this.id]
+          this.user = this.userService.users[this.id];
       }
-    )
+    );
     // this.userForm?.valueChanges.subscribe(
-    //   (value) => console.log(value)      
+    //   (value) => console.log(value)
     // )
     // this.userForm?.statusChanges.subscribe(
-    //   (status) => console.log(status)      
+    //   (status) => console.log(status)
     // )
 
     // this.userForm?.setValue( {
@@ -65,12 +66,12 @@ coronaOptions = [{'value':'against', 'name': 'Against corona'},{'value':'for', '
 
   createForm(): FormGroup {
     return new FormGroup({
-      'name': new FormControl(this.defaultName, [Validators.required, this.forbiddenNames]),
-      'email': new FormControl(this.defaultEmail, [Validators.required, Validators.email], [this.forbiddenEmails]),
-      'password': new FormControl(this.defaultPassword, [Validators.required, Validators.minLength(8)]),
-      'gender': new FormControl(this.defaultGender, Validators.required),
-      'roles': new FormArray([]),
-      'corona': new FormControl(this.defaultCorona)
+      name: new FormControl(this.defaultName, [Validators.required, this.forbiddenNames]),
+      email: new FormControl(this.defaultEmail, [Validators.required, Validators.email], [this.forbiddenEmails]),
+      password: new FormControl(this.defaultPassword, [Validators.required, Validators.minLength(8)]),
+      gender: new FormControl(this.defaultGender, Validators.required),
+      roles: new FormArray([]),
+      corona: new FormControl(this.defaultCorona)
     });
   }
 
@@ -78,52 +79,50 @@ coronaOptions = [{'value':'against', 'name': 'Against corona'},{'value':'for', '
     return this.userForm.get('roles') as FormArray;
   }
 
-  onAddRole() {
+  onAddRole(): void {
     const control: FormControl = new FormControl('admin', Validators.required);
-    this.getRoles().push(control)
+    this.getRoles().push(control);
   }
 
-  onDeleteRole(i: number) {
-    this.getRoles().removeAt(i)
+  onDeleteRole(i: number): void {
+    this.getRoles().removeAt(i);
   }
 
-  onSubmit() {
-    let name = this.userForm?.value.name
-    let email = this.userForm?.value.email
-    let password = this.userForm?.value.password
-    let gender = this.userForm?.value.gender
-    let roles = this.userForm?.value.roles
-    let coronaAttitude = this.userForm?.value.corona
-    let user = new User(name, email, password, gender, roles, coronaAttitude)
-    this.userService.users.push(user)
-    this.userForm?.reset()
-    let index = this.userService.users.length - 1
-    this.router.navigate(["..", index], { relativeTo: this.route })
+  onSubmit(): void {
+    const name = this.userForm?.value.name;
+    const email = this.userForm?.value.email;
+    const password = this.userForm?.value.password;
+    const gender = this.userForm?.value.gender;
+    const roles = this.userForm?.value.roles;
+    const coronaAttitude = this.userForm?.value.corona;
+    const user = new User(name, email, password, gender, roles, coronaAttitude);
+    this.userService.users.push(user);
+    this.userForm?.reset();
+    const index = this.userService.users.length - 1;
+    this.router.navigate(['..', index], {relativeTo: this.route});
   }
 
   forbiddenNames(control: FormControl): { [s: string]: boolean } | null {
-    const forbiddenUsernames = ['ersch', 'admin']
+    const forbiddenUsernames = ['ersch', 'admin'];
 
     if (forbiddenUsernames.indexOf((control.value as string)?.toLowerCase()) !== -1) {
-      return { 'nameIsForbidden': true };
+      return {nameIsForbidden: true};
     }
     return null;
   }
 
-  forbiddenEmails(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null>{
-    const forbiddenUsernames = ['test@test.de', 'test3@test.de']
+  forbiddenEmails(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
+    const forbiddenUsernames = ['test@test.de', 'test3@test.de'];
 
-    const promise = new Promise<any>((resolve, reject) => {
+    return new Promise<any>((resolve) => {
       setTimeout(
         () => {
           if (forbiddenUsernames.indexOf((control.value as string)?.toLowerCase()) !== -1) {
-            resolve({ 'emailIsForbidden': true })
+            resolve({emailIsForbidden: true});
+          } else {
+            resolve(null);
           }
-          else {
-            resolve(null)
-          }
-        }, 1500)
-    })
-    return promise
+        }, 1500);
+    });
   }
 }
