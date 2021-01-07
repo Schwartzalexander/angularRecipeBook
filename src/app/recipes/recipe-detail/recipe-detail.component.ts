@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Recipe} from 'src/app/model/recipe.model';
 import {DataService} from 'src/app/services/data.service';
@@ -20,13 +20,13 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   dataServiceSubscription: Subscription | undefined;
 
   constructor(private dataService: DataService, private loggingService: LoggingService, private recipeService: RecipeService,
-              private shoppingService: ShoppingService, private activeRoute: ActivatedRoute) {
+              private shoppingService: ShoppingService, private route: ActivatedRoute, private router: Router) {
 
     this.dataServiceSubscription = this.dataService.subject.subscribe((message: string) => this.reactToEventFromService(message));
   }
 
   ngOnInit(): void {
-    this.activeRoute.params.subscribe(
+    this.route.params.subscribe(
       (params) => {
         this.id = +params.id;
         this.recipe = this.recipeService.recipes[this.id];
@@ -70,5 +70,13 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       return false;
     }
     return this.recipe.ingredients.length > 0;
+  }
+
+  deleteRecipe(): void {
+    if (this.id !== undefined) {
+      this.recipeService.recipes.splice(this.id, 1);
+      this.router.navigate(['..'], {relativeTo: this.route});
+    }
+
   }
 }

@@ -3,6 +3,7 @@ import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Recipe} from 'src/app/model/recipe.model';
 import {RecipeService} from 'src/app/services/recipe.service';
+import {Ingredient} from '../../model/ingredient.model';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -73,8 +74,8 @@ export class RecipeEditComponent implements OnInit {
         for (const ingredient of this.recipe.ingredients) {
           ingredientsFormArray.push(
             new FormGroup({
-                name: new FormControl(ingredient.name),
-                amount: new FormControl((ingredient.amount))
+                name: new FormControl(ingredient.name, Validators.required),
+                amount: new FormControl((ingredient.amount), [Validators.required, Validators.pattern('^[1-9]+[0-9]*$')])
               }
             )
           );
@@ -93,17 +94,29 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // console.log(this.recipeForm);
-    // const name = this.recipeForm?.value.name;
-    // const description = this.recipeForm?.value.description;
-    // const imagePath = this.recipeForm?.value.imagePath;
-    // const poisonLevel = this.recipeForm?.value.poisonLevel;
-    // const rating = this.recipeForm?.value.rating;
-    // const recipe = new Recipe(name, description, imagePath, [], poisonLevel, rating);
-    // this.recipeService.recipes.push(recipe);
+    console.log(this.recipeForm);
+    const name = this.recipeForm?.value.name;
+    const description = this.recipeForm?.value.description;
+    const imagePath = this.recipeForm?.value.imagePath;
+    const poisonLevel = this.recipeForm?.value.poisonLevel;
+    const rating = this.recipeForm?.value.rating;
+    const ingredientsData: { name: string, amount: number }[] = this.recipeForm?.value.ingredients;
+    const ingredients: Ingredient[] = [];
+    for (const ingredient of ingredientsData) {
+      ingredients.push(new Ingredient(ingredient.name, ingredient.amount));
+    }
+    const recipe = new Recipe(name, description, imagePath, ingredients, poisonLevel, rating);
+
+    if (this.editMode && this.id !== undefined) {
+      this.recipeService.recipes[this.id] = recipe;
+      this.router.navigate(['..'], {relativeTo: this.route});
+    } else {
+      this.recipeService.recipes.push(recipe);
+      const redirectId = this.recipeService.recipes.length - 1;
+      this.router.navigate(['..', redirectId], {relativeTo: this.route});
+    }
     this.recipeForm?.reset();
-    const index = this.recipeService.recipes.length - 1;
-    this.router.navigate(['..', index], {relativeTo: this.route});
+
   }
 
   getIngredients(): FormArray {
@@ -111,12 +124,20 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onAddIngredient(): void {
-    const control: FormControl = new FormControl('Butter', Validators.required);
-    this.getIngredients().push(control);
+    this.getIngredients().push(new FormGroup({
+        name: new FormControl('Bohnen', Validators.required),
+        amount: new FormControl('20', [Validators.required, Validators.pattern('^[1-9]+[0-9]*$')])
+      }
+    ));
   }
 
   onDeleteIngredient(i: number): void {
     this.getIngredients().removeAt(i);
+  }
+
+  onCancel(): void {
+    this.router.navigate(['..'], {relativeTo: this.route});
+
   }
 
 }

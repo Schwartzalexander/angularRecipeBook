@@ -1,57 +1,57 @@
 <div class="row">
-    <div class="col-xs-12">
-        <img [src]="recipe?.imagePath" alt="{{recipe?.name}}" class="img-responsive">
-    </div>
+  <div class="col-xs-12">
+    <img [src]="recipe?.imagePath" alt="{{recipe?.name}}" class="img-responsive">
+  </div>
 </div>
 <div class="row">
-    <div class="col-xs-12">
-        <h1>{{recipe?.name}}</h1>
-        <p class="list-group-item-text font-weight-bold">{{recipe?.rating}} stars</p><br>
-    </div>
+  <div class="col-xs-12">
+    <h1>{{recipe?.name}}</h1>
+    <p class="list-group-item-text font-weight-bold">{{recipe?.rating}} stars</p><br>
+  </div>
 </div>
 <div class="row">
-    <div class="col-xs-12">
-        <div appDropdown class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle">
-                Manage recipe <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a style="cursor: pointer;" (click)="addToShoppingList()">To shopping list</a></li>
-                <li><a style="cursor: pointer;" [routerLink]="['edit']">Edit recipe</a></li>
-                <li><a style="cursor: pointer;">Delete recipe</a></li>
-            </ul>
-        </div>
-        <br>
-        <br>
+  <div class="col-xs-12">
+    <div appDropdown class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle">
+        Manage recipe <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a style="cursor: pointer;" (click)="addToShoppingList()">To shopping list</a></li>
+        <li><a style="cursor: pointer;" [routerLink]="['edit']">Edit recipe</a></li>
+        <li><a style="cursor: pointer;" (click)="deleteRecipe()">Delete recipe</a></li>
+      </ul>
     </div>
+    <br>
+    <br>
+  </div>
 </div>
 
 <div class="row">
-    <div class="col-xs-12">
-        <div class="row">
-            <div class="col-xs-12">
-                <p>{{ recipe?.description}}</p>
-                <p>Poison level: {{ recipe?.poisonLevel}}</p>
-                <h2>Ingredients</h2>
-                <table class="table" *ngIf="areThereIngredients(); else noIngredients">
-                    <thead>
-                        <tr>
-                            <th scope="col">Ingredient</th>
-                            <th scope="col">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let ingredient of recipe?.ingredients">
-                            <td>{{ingredient.name}}</td>
-                            <td>{{ingredient.amount}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <ng-template #noIngredients>
-                    <p>There are no ingredients.</p>
-                </ng-template>
-            </div>
-        </div>
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <p>{{ recipe?.description}}</p>
+        <p>Poison level: {{ recipe?.poisonLevel}}</p>
+        <h2>Ingredients</h2>
+        <table class="table" *ngIf="areThereIngredients(); else noIngredients">
+          <thead>
+          <tr>
+            <th scope="col">Ingredient</th>
+            <th scope="col">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let ingredient of recipe?.ingredients">
+            <td>{{ingredient.name}}</td>
+            <td>{{ingredient.amount}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <ng-template #noIngredients>
+          <p>There are no ingredients.</p>
+        </ng-template>
+      </div>
     </div>
+  </div>
 
 </div>

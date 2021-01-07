@@ -19,7 +19,7 @@
       <textarea class="form-control"
                 cols="100"
                 formControlName="description" id="description" rows="10">{{descriptionValue}}</textarea>
-      <p *ngIf="recipeForm?.get('description')?.valid && recipeForm?.get('description')?.touched"
+      <p *ngIf="!recipeForm?.get('description')?.valid && recipeForm?.get('description')?.touched"
          class="help-block">Please enter a
         description.</p>
     </div>
@@ -31,11 +31,11 @@
         id="imagePath"
         type="text">
       <span *ngIf="!recipeForm?.get('imagePath')?.valid && recipeForm?.get('imagePath')?.touched" class="help-block">
-        <p *ngIf="recipeForm?.get('imagePath')?.getError('required')" class="help-block">Please enter an imagePath.</p>
+        <p *ngIf="recipeForm?.get('imagePath')?.getError('required')" class="help-block">Please enter an image path.</p>
       </span>
       <div class="row">
         <div class="col-xs-12">
-          <img src="" class="img-responsive">
+          <img [src]="recipeForm?.get('imagePath')?.value" class="img-responsive">
         </div>
       </div>
     </div>
@@ -71,18 +71,21 @@
              *ngFor="let ingredientControl of getIngredients().controls; index as i" style="margin-top: 10px">
           <div class="col-xs-8">
             <input class="form-control" type="text" formControlName="name">
+            <p *ngIf="ingredientControl?.get('name') ?.getError('required')" class="help-block">Please enter a name.</p>
           </div>
           <div class="col-xs-2">
             <input class="form-control" type="number" formControlName="amount">
+            <p *ngIf="ingredientControl?.get('amount') ?.getError('required')" class="help-block">Please enter the
+              amount
+              .</p>
+            <p *ngIf="ingredientControl?.get('amount') ?.getError('pattern')" class="help-block">The amount must be a
+              positive number.</p>
           </div>
           <div class="col-xs-2">
-            <button (click)="onDeleteIngredient(i)" class="btn btn-default" type="button">
+            <button (click)="onDeleteIngredient(i)" class="btn btn-danger" type="button">
               <span class="glyphicon glyphicon-remove"></span>
             </button>
           </div>
-          <!--          <p *ngIf="!ingredientControl?.valid && ingredientControl?.touched" class="help-block">Please enter a valid-->
-          <!--            ingredient.</p>-->
-
         </div>
       </div>
 
@@ -92,6 +95,7 @@
         <button class="btn btn-success" [disabled]="!recipeForm?.valid"
                 type="submit">{{editMode ? 'Update' : 'Save'}}
         </button>
+        <button class="btn btn-danger" type="button" (click)="onCancel()">Cancel</button>
       </div>
     </div>
   </div>
