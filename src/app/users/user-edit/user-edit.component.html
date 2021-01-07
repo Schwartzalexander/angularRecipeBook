@@ -21,8 +21,12 @@
                 type="text"
                 id="email"
                 formControlName="email"
-                class="form-control">         
-                <p class="help-block" *ngIf="!userForm.get('email')?.valid && userForm.get('email')?.touched">Please enter a valid email address.</p>
+                class="form-control">                
+                <span class="help-block" *ngIf="!userForm.get('email')?.valid && userForm.get('email')?.touched">
+                    <p class="help-block" *ngIf="userForm.get('email')?.getError('emailIsForbidden')">This email address is forbidden.</p>
+                    <p class="help-block" *ngIf="userForm.get('email')?.getError('required')">Please enter an email address.</p>
+                    <p class="help-block" *ngIf="userForm.get('email')?.getError('email')">This email address is invalid.</p>
+                </span>    
         </div>        
         <div class="col-sm-12 form-group">
             <label for="password">Password</label>

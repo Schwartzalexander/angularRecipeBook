@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { TestBed } from '@angular/core/testing';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { User } from 'src/app/model/user.model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -44,7 +46,7 @@ export class UserEditComponent implements OnInit {
   createForm(): FormGroup {
     return new FormGroup({
       'name': new FormControl("Anna", [Validators.required, this.forbiddenNames]),
-      'email': new FormControl("anna@aSchwartz.de", [Validators.required, Validators.email]),
+      'email': new FormControl("anna@aSchwartz.de", [Validators.required, Validators.email], [this.forbiddenEmails]),
       'password': new FormControl("456456456654", [Validators.required, Validators.minLength(8)]),
       'gender': new FormControl("female", Validators.required),
       'roles': new FormArray([])
@@ -85,5 +87,22 @@ export class UserEditComponent implements OnInit {
       return { 'nameIsForbidden': true };
     }
     return null;
+  }
+
+  forbiddenEmails(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null>{
+    const forbiddenUsernames = ['test@test.de', 'test3@test.de']
+
+    const promise = new Promise<any>((resolve, reject) => {
+      setTimeout(
+        () => {
+          if (forbiddenUsernames.indexOf((control.value as string).toLowerCase()) !== -1) {
+            resolve({ 'emailIsForbidden': true })
+          }
+          else {
+            resolve(null)
+          }
+        }, 1500)
+    })
+    return promise
   }
 }
