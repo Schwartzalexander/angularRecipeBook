@@ -1,7 +1,9 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Ingredient } from 'src/app/model/ingredient.model';
 import { DataService } from 'src/app/services/data.service';
 import { LoggingService } from 'src/app/services/logging.service';
+import { ShoppingService } from 'src/app/services/shopping.service';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -10,24 +12,31 @@ import { LoggingService } from 'src/app/services/logging.service';
 })
 export class ShoppingEditComponent implements OnInit {
 
-  @Output() itemAdded = new EventEmitter<{ name: string, amount: number }>()
   @Output('itemEditedSuperBindingNAME') itemEdited = new EventEmitter<{ name: string, amount: number }>()
+ 
 
-  @ViewChild('nameInput', { static: false }) nameInput: ElementRef | undefined
-  @ViewChild('amountInput') amountInput: ElementRef | undefined
+  @ViewChild('shoppingForm') shoppingForm: NgForm | undefined
 
-  constructor(private loggingService: LoggingService, private dataSerive : DataService) {}
+  // Default values
+  defaultName = "Beer"
+  defaulAmount = 20
+
+  constructor(private loggingService: LoggingService, private dataSerive : DataService, private shoppingService : ShoppingService) {}
 
   ngOnInit(): void {
   }
 
-  onAddClicked(nameInput: HTMLInputElement, amountInput: HTMLInputElement) {
-    this.loggingService.log(this.nameInput)
-    this.loggingService.log(nameInput)
-    // this.itemAdded.emit({ name: nameInput.value, amount: amountInput.value })
-    const ingredient = new Ingredient(nameInput.value, parseInt(amountInput.value))
-    this.itemAdded.emit(ingredient)
+  onAddClicked() {
+    let name = this.shoppingForm?.value.name
+    let amount = this.shoppingForm?.value.amount
+    
+    const ingredient = new Ingredient(name, parseInt(amount))
+    this.shoppingService.ingredients.push(ingredient)
+
+    this.shoppingForm?.reset() 
   }
+
+  
   onEditClicked(nameInput: HTMLInputElement, amountInput: HTMLInputElement) {
     if (this.nameInput === undefined || this.amountInput === undefined)
       return;

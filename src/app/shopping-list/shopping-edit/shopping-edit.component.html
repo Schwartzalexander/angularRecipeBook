@@ -1,25 +1,24 @@
 <div class="row">
     <div class="col-xs-12">
-        <form>
+        <form (ngSubmit)="onAddClicked()" #shoppingForm="ngForm">
             <div class="row">
                 <div class="col-sm-5 form-group">
                     <label for="name">Name</label>
-                    <input ngModel name="name" type="text" id="name" class="form-control" value="Beer" #nameInput>
-                </div>
+                    <input ngModel name="name" type="text" id="name" class="form-control" [ngModel]="defaultName" #nameInput required #name="ngModel">
+                    <p class="help-block" *ngIf="!name.valid && name.touched">Please enter a name.</p>
+            </div>
                 <div class="col-sm-2 form-group">
                     <label for="amount">Amount</label>
-                    <input ngModel name="amount" type="number" id="amount" class="form-control" value="20" #amountInput>
+                    <input ngModel name="amount" type="number" id="amount" class="form-control" [ngModel]="defaulAmount" #amountInput  required #amount="ngModel">
+                    <p class="help-block" *ngIf="!amount.valid && amount.touched">Please enter an amount.</p>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-xs-12">
-                    <button class="btn btn-success" type="button"
-                        (click)="onAddClicked(nameInput, amountInput)">Add</button>
+                    <button class="btn btn-success" type="submit">Add</button>
                     <button class="btn btn-danger" type="button">Delete</button>
                     <button class="btn btn-primary" type="button">Clear</button>
-                    <button class="btn btn-group" type="button"
-                    (click)="onEditClicked(nameInput, amountInput)">Edit</button>
                 </div>
             </div>
         </form>
