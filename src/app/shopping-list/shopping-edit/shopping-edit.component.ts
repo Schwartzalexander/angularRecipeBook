@@ -14,8 +14,10 @@ import {Subscription} from 'rxjs';
 export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   @ViewChild('shoppingForm') shoppingForm: NgForm | undefined;
-  id: number | undefined;
+
   editMode = false;
+  editedId: number | undefined;
+  editedIngredient: Ingredient | undefined;
 
   // Default values
   defaultName = 'Beer';
@@ -28,8 +30,15 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.shoppingService.clickOnIngredientSubject.subscribe(id => {
-      this.id = id;
+      this.editedId = id;
       this.editMode = true;
+      this.editedIngredient = this.shoppingService.ingredients[id];
+
+      this.shoppingForm?.setValue(
+        {
+          name: this.editedIngredient?.name,
+          amount: this.editedIngredient?.amount
+        });
     });
   }
 
@@ -37,17 +46,32 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe();
   }
 
-  onAddClicked(): void {
+  onSubmit(): void {
     const name = this.shoppingForm?.value.name;
     const amount = this.shoppingForm?.value.amount;
 
     const ingredient = new Ingredient(name, parseInt(amount, 0));
-    this.shoppingService.ingredients.push(ingredient);
+    if (this.editMode && this.editedId !== undefined)
+      this.shoppingService.ingredients[this.editedId] = ingredient;
+    else
+      this.shoppingService.ingredients.push(ingredient);
 
-    this.shoppingForm?.reset();
+    this.onClear();
   }
 
   onEditClicked(nameInput: HTMLInputElement, amountInput: HTMLInputElement): void {
   }
 
+  onClear(): void {
+    this.editMode = false;
+    this.editedId = undefined;
+    this.shoppingForm?.reset();
+  }
+
+  onDelete(): void {
+    if (this.editMode && this.editedId !== undefined)
+      this.shoppingService.ingredients.splice(this.editedId, 1);
+
+    this.onClear();
+  }
 }
