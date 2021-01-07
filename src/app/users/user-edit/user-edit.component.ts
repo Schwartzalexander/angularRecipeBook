@@ -15,7 +15,6 @@ export class UserEditComponent implements OnInit {
   id: number | undefined
   editMode = false;
   user: User | undefined
-  public forbiddenUsernames = ['erSch', 'Admin']
 
   // radio options
   genderOptions = ['male', 'female', 'transsex', 'transgender', 'söder', 'transsex man to female', 'guy with small dick']
