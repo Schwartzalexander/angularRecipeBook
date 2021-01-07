@@ -39,11 +39,21 @@
                         type="radio"
                         formControlName="gender"
                         [value]="genderOption">   
-                {{genderOption}}</label>
+                    {{genderOption}}</label>
             </div>                     
             <p class="help-block" *ngIf="!userForm.get('gender')?.valid && userForm.get('gender')?.touched">Please select a gender.</p>
         </div>
-       
+        <div class="col-sm-12 form-group">
+            <h4>Roles</h4>
+            <button class="btn btn-default" type="button" (click)="onAddRole()">Add role</button>
+            <div class="form-group" formArrayName="roles" *ngFor="let role of getRoles().controls; index as i">
+                <input type="text" class="form-control" [formControlName]="i">
+                <button class="btn btn-default" type="button" (click)="onDeleteRole(i)"><span class="glyphicon glyphicon-remove"></span> Remove</button>
+                <p class="help-block" *ngIf="!role?.valid && role?.touched">Please enter a valid role.</p>
+                <p>{{role.value}}</p>
+
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-12">
                 <button class="btn btn-success" [disabled]="!userForm?.valid" type="submit">Save</button>

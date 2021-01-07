@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-12">
-        <h1>{{user?.name}}</h1> 
+        <h1>{{user?.name}}</h1>
     </div>
 </div>
 <div class="row">
@@ -22,8 +22,8 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="row">
-            <div class="col-xs-12"> 
-                <table class="table" >
+            <div class="col-xs-12">
+                <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">Key</th>
@@ -34,7 +34,8 @@
                         <tr>
                             <td>Gender</td>
                             <td>{{ user?.gender}}</td>
-                        </tr>   <tr>
+                        </tr>
+                        <tr>
                             <td>Email</td>
                             <td><a href="mailto:{{ user?.email}}">{{ user?.email}}</a></td>
                         </tr>
@@ -44,8 +45,21 @@
                         </tr>
                     </tbody>
                 </table>
-                <ng-template #noIngredients>
-                    <p>There are no ingredients.</p>
+                <h2>Roles</h2>
+                <table class="table" *ngIf="areThereRoles(); else noRoles">
+                    <thead>
+                        <tr>
+                            <th scope="col">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let role of user?.roles">
+                            <td>{{role}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ng-template #noRoles>
+                    <p>There are no roles.</p>
                 </ng-template>
             </div>
         </div>

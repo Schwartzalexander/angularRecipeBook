@@ -17,8 +17,6 @@ export class UserDetailComponent implements OnInit {
   user: User | undefined
   id: number | undefined
 
-  dataServiceSubscription: Subscription | undefined
-
   constructor(private dataService: DataService, private loggingService: LoggingService, private userService: UserService, private shoppingService: ShoppingService, private activeRoute: ActivatedRoute) {
   }
 
@@ -31,11 +29,12 @@ export class UserDetailComponent implements OnInit {
     )
   }
 
-  ngOnDestroy(): void {
-    // The subscription could be destroyed here, but if we did that, it wouldn't do anything at all.
-    // To show the effect (receive an event), we must switch to the shopping list and 
-    // therefor destroy this component.
-    //this.dataServiceSubscription?.unsubscribe()
+
+  areThereRoles() {
+    if (this.user === undefined)
+      return false
+    if (this.user.roles === undefined)
+      return false
+    return this.user.roles.length > 0
   }
- 
 }

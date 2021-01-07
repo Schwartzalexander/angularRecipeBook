@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/model/user.model';
 import { UserService } from 'src/app/services/user.service';
@@ -29,7 +29,7 @@ export class UserEditComponent implements OnInit {
   constructor(private activeRoute: ActivatedRoute, private userService: UserService, private router: Router,
     private route: ActivatedRoute) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.activeRoute.params.subscribe(
       (params) => {
         this.id = +params['id']
@@ -40,13 +40,27 @@ export class UserEditComponent implements OnInit {
     )
   }
 
-  createForm() : FormGroup{
+  createForm(): FormGroup {
     return new FormGroup({
       'name': new FormControl("Anna", Validators.required),
       'email': new FormControl("anna@aSchwartz.de", [Validators.required, Validators.email]),
       'password': new FormControl("456456456654", [Validators.required, Validators.minLength(8)]),
       'gender': new FormControl("female", Validators.required),
+      'roles': new FormArray([])
     });
+  }
+
+  getRoles() : FormArray {
+    return this.userForm.get('roles') as FormArray;
+  }
+
+  onAddRole() {
+    const control: FormControl = new FormControl('admin', Validators.required);
+    this.getRoles().push(control)
+  }
+
+  onDeleteRole(i: number){
+    this.getRoles().removeAt(i)
   }
 
   onSubmit() {
@@ -55,7 +69,8 @@ export class UserEditComponent implements OnInit {
     let email = this.userForm?.value.email
     let password = this.userForm?.value.password
     let gender = this.userForm?.value.gender
-    let user = new User(name, email, password, gender)
+    let roles = this.userForm?.value.roles
+    let user = new User(name, email, password, gender, roles)
     this.userService.users.push(user)
     this.userForm?.reset()
     let index = this.userService.users.length - 1

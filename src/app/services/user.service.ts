@@ -7,9 +7,9 @@ import { User } from '../model/user.model';
 export class UserService {
 
   users: User[] = [
-    new User('erSch', 'mail@aSchwartz.de', '123456', 'male'),
-    new User('Mephisto', 'mail@hell.org', 'hellguy', 'male'),
-    new User('Södarsch', 'fickarsch@csu.de', 'söder','guy with small dick')]
+    new User('erSch', 'mail@aSchwartz.de', '123456', 'male', ['admin']),
+    new User('Mephisto', 'mail@hell.org', 'hellguy', 'male', ['devil']),
+    new User('Södarsch', 'fickarsch@csu.de', 'söder','guy with small dick', ['fashist'])]
 
   constructor() { }
 
