@@ -61,8 +61,14 @@
                 <button class="btn btn-default" type="button" (click)="onDeleteRole(i)"><span class="glyphicon glyphicon-remove"></span> Remove</button>
                 <p class="help-block" *ngIf="!role?.valid && role?.touched">Please enter a valid role.</p>
                 <p>{{role.value}}</p>
-
             </div>
+        </div>
+        <div class="col-sm-12 form-group">
+            <label for="corona">Corona attitude</label>
+            <select id="corona" class="form-control" formControlName="corona">
+                <option [value]="coronaOption.value" *ngFor="let coronaOption of coronaOptions">{{coronaOption.name}}</option>
+            </select>
+            <p class="help-block" *ngIf="!userForm.get('corona')?.valid && userForm.get('corona')?.touched">Please select a corona attitude.</p>
         </div>
         <div class="row">
             <div class="col-xs-12">

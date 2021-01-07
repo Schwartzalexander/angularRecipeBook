@@ -42,6 +42,10 @@
                         <tr>
                             <td>Password</td>
                             <td>{{ user?.password}}</td>
+                        </tr>   
+                        <tr>
+                            <td>Corona attitude</td>
+                            <td>{{ user?.coronaAttitude == 'for' ? 'For corona' : 'Against corona'}}</td>
                         </tr>
                     </tbody>
                 </table>

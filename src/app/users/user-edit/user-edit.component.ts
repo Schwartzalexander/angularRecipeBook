@@ -17,7 +17,7 @@ export class UserEditComponent implements OnInit {
 
   // radio options
   genderOptions = ['male', 'female', 'transsex', 'transgender', 'söder', 'transsex man to female', 'guy with small dick']
-
+coronaOptions = [{'value':'against', 'name': 'Against corona'},{'value':'for', 'name': 'For corona'}]
 
   // Default values
   defaultName = "Hansi"
@@ -25,6 +25,7 @@ export class UserEditComponent implements OnInit {
   defaultPassword = "quietschpfiff"
   defaultGender = this.genderOptions[3]
   defaultRoles = ['admin', 'boss']
+  defaultCorona= [this.coronaOptions[0].value]
 
   userForm: FormGroup = this.createForm()
 
@@ -68,7 +69,8 @@ export class UserEditComponent implements OnInit {
       'email': new FormControl(this.defaultEmail, [Validators.required, Validators.email], [this.forbiddenEmails]),
       'password': new FormControl(this.defaultPassword, [Validators.required, Validators.minLength(8)]),
       'gender': new FormControl(this.defaultGender, Validators.required),
-      'roles': new FormArray([])
+      'roles': new FormArray([]),
+      'corona': new FormControl(this.defaultCorona)
     });
   }
 
@@ -86,13 +88,13 @@ export class UserEditComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.userForm)
     let name = this.userForm?.value.name
     let email = this.userForm?.value.email
     let password = this.userForm?.value.password
     let gender = this.userForm?.value.gender
     let roles = this.userForm?.value.roles
-    let user = new User(name, email, password, gender, roles)
+    let coronaAttitude = this.userForm?.value.corona
+    let user = new User(name, email, password, gender, roles, coronaAttitude)
     this.userService.users.push(user)
     this.userForm?.reset()
     let index = this.userService.users.length - 1
@@ -102,7 +104,7 @@ export class UserEditComponent implements OnInit {
   forbiddenNames(control: FormControl): { [s: string]: boolean } | null {
     const forbiddenUsernames = ['ersch', 'admin']
 
-    if (forbiddenUsernames.indexOf((control.value as string).toLowerCase()) !== -1) {
+    if (forbiddenUsernames.indexOf((control.value as string)?.toLowerCase()) !== -1) {
       return { 'nameIsForbidden': true };
     }
     return null;
