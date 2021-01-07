@@ -34,8 +34,9 @@ const appRoutes: Routes = [
       {path: ':id/edit', component: UserEditComponent}
     ]
   },
-  {path: 'not-found', component: Error404Component, data: {message: 'Page not found!'}},
-  // { path: '**', redirectTo: '/not-found' }
+  {path: '**', component: Error404Component, data: {message: 'Page not found!'}},
+  // Redirection = Bad user experience. The url will be lost
+  // {path: '**', redirectTo: '/not-found'}
 ];
 
 @NgModule({
