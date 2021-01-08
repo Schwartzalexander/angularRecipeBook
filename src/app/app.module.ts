@@ -33,6 +33,9 @@ import {UsersComponent} from './users/users.component';
 import {ShortenPipe} from './pipes/shorten.pipe';
 import {StarPipe} from './pipes/star.pipe';
 import {FilterPipe} from './recipes/recipe-list/filter.pipe';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {LoggingInterceptorService} from './interceptors/logging-interceptor.service';
+import {AuthInterceptorService} from './interceptors/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -73,9 +76,13 @@ import {FilterPipe} from './recipes/recipe-list/filter.pipe';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptorService, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

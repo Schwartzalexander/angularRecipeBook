@@ -12,15 +12,16 @@ import {NoUserShownComponent} from './users/no-user-shown/no-user-shown.componen
 import {UserDetailComponent} from './users/user-detail/user-detail.component';
 import {UserEditComponent} from './users/user-edit/user-edit.component';
 import {UsersComponent} from './users/users.component';
+import {RecipesResolverService} from './services/recipes-resolver.service';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: 'recipes', pathMatch: 'full'},
   {
     path: 'recipes', component: RecipesComponent, children: [
-      {path: '', component: NoRecipeShownComponent},
-      {path: 'new', component: RecipeEditComponent},
-      {path: ':id', component: RecipeDetailComponent},
-      {path: ':id/edit', component: RecipeEditComponent}
+      {path: '', component: NoRecipeShownComponent, resolve: [RecipesResolverService]},
+      {path: 'new', component: RecipeEditComponent, resolve: [RecipesResolverService]},
+      {path: ':id', component: RecipeDetailComponent, resolve: [RecipesResolverService]},
+      {path: ':id/edit', component: RecipeEditComponent, resolve: [RecipesResolverService]}
     ]
   },
   {path: 'shoppingList', component: ShoppingListComponent},
