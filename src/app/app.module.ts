@@ -31,7 +31,8 @@ import {UserItemComponent} from './users/user-list/user-item/user-item.component
 import {UserListComponent} from './users/user-list/user-list.component';
 import {UsersComponent} from './users/users.component';
 import {ShortenPipe} from './pipes/shorten.pipe';
-import { StarPipe } from './pipes/star.pipe';
+import {StarPipe} from './pipes/star.pipe';
+import {FilterPipe} from './recipes/recipe-list/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { StarPipe } from './pipes/star.pipe';
     NoUserShownComponent,
     UserDetailComponent,
     ShortenPipe,
-    StarPipe
+    StarPipe,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

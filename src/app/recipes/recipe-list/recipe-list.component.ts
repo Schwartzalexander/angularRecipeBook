@@ -11,6 +11,7 @@ import {RecipeService} from 'src/app/services/recipe.service';
 export class RecipeListComponent implements OnInit {
 
   recipes: Recipe[] | undefined;
+  filterTerm = '';
 
   constructor(private loggingService: LoggingService, private recipeService: RecipeService) {
   }

@@ -1,12 +1,30 @@
 <div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-success" [routerLink]="['new']">New Recipe</button>
-    </div>
+  <div class="col-xs-12">
+    <button class="btn btn-success" [routerLink]="['new']">New Recipe</button>
+  </div>
 </div>
 <hr>
 <div class="row">
-    <div class="col-xs-12">
-       <!-- <app-recipe-item *ngFor="let recipe of recipes" [recipe-item-awesome-binding-name]="recipe"></app-recipe-item> -->
-       <app-recipe-item *ngFor="let recipe of recipes; index as i" [recipe]="recipe" [id]="i"></app-recipe-item>
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-1">Filter:</div>
+      <div class="col-xs-6">
+        <input type="text" class="form-control" [(ngModel)]="filterTerm">
+
+      </div>
+      <div class="col-xs-2">
+        <button (click)="filterTerm=''" class="btn btn-danger" type="button">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+      </div>
     </div>
+    <p class="help-block" *ngIf="filterTerm.length>0; else showLineBreak">Warning: Filtering breaks IDs. This means,
+      that wrong recipes are selected.</p>
+    <ng-template #showLineBreak>
+      <br>
+    </ng-template>
+    <!-- <app-recipe-item *ngFor="let recipe of recipes" [recipe-item-awesome-binding-name]="recipe"></app-recipe-item> -->
+    <app-recipe-item *ngFor="let recipe of recipes|filter:filterTerm:true:true; index as i" [recipe]="recipe"
+                     [id]="i"></app-recipe-item>
+  </div>
 </div>
