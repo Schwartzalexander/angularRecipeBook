@@ -44,17 +44,31 @@ export class AuthComponent implements OnInit {
     this.errorMessage = '';
     this.isLoading = true;
     if (this.isLoginMode) {
-
+      this.signIn(user);
     } else {
-      this.authService.signup(user.email, user.password).subscribe(data => {
-        this.isLoading = false;
-      }, errorMessage => {
-        console.log(errorMessage);
-        this.isLoading = false;
-        this.errorMessage = errorMessage;
-      });
+      this.signUp(user);
     }
     //  this.router.navigate(['..', redirectId], {relativeTo: this.route});
     // this.authForm?.reset();
+  }
+
+  private signUp(user: User): void {
+    this.authService.signUp(user.email, user.password).subscribe(data => {
+      this.isLoading = false;
+    }, errorMessage => {
+      console.log(errorMessage);
+      this.isLoading = false;
+      this.errorMessage = errorMessage;
+    });
+  }
+
+  private signIn(user: User): void {
+    this.authService.signIn(user.email, user.password).subscribe(data => {
+      this.isLoading = false;
+    }, errorMessage => {
+      console.log(errorMessage);
+      this.isLoading = false;
+      this.errorMessage = errorMessage;
+    });
   }
 }

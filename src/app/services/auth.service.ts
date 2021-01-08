@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
@@ -10,6 +10,7 @@ interface AuthResponseData {
   refreshTOken: string;
   expiresIn: string;
   localId: string;
+  registered?: boolean;
 }
 
 @Injectable({
@@ -18,19 +19,30 @@ interface AuthResponseData {
 export class AuthService {
 
   urlSignUp = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
+  urlSignIn = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
   apiKey = 'AIzaSyALO01jLzk5PTc-m0Wynz3nEvZRzXJ07tI';
 
   constructor(private http: HttpClient) {
   }
 
-  signup(email: string, password: string): Observable<AuthResponseData> {
+  signUp(email: string, password: string): Observable<AuthResponseData> {
     return this.http.post<AuthResponseData>(this.urlSignUp + '?key=' + this.apiKey, {email, password, returnSecureToken: 'true'})
-      .pipe(catchError(errorResponse => {
+      .pipe(catchError(this.handleError));
+    // The previous line does the same as the following three lines:
+    // .pipe(catchError(errorResponse => {
+    //   return this.handleError(errorResponse);
+    // }));
+  }
 
-        if (!errorResponse || !errorResponse.error || !errorResponse.error.error || !errorResponse.error.error.message)
-          return throwError('An unknown error occured');
-        else
-          return throwError(errorResponse.error.error.message);
-      }));
+  signIn(email: string, password: string): Observable<AuthResponseData> {
+    return this.http.post<AuthResponseData>(this.urlSignIn + '?key=' + this.apiKey, {email, password, returnSecureToken: 'true'})
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(errorResponse: HttpErrorResponse): Observable<never> {
+    if (!errorResponse || !errorResponse.error || !errorResponse.error.error || !errorResponse.error.error.message)
+      return throwError('An unknown error occurred.');
+    else
+      return throwError(errorResponse.error.error.message);
   }
 }
