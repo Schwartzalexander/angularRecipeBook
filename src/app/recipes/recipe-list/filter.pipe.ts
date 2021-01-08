@@ -7,10 +7,11 @@ import {Recipe} from '../../model/recipe.model';
 })
 export class FilterPipe implements PipeTransform {
 
-  transform(recipes: Recipe[], filterString: string, searchDescriptions: boolean, searchIngredients: boolean): unknown {
-    filterString = filterString.toLowerCase();
-    if (recipes.length === 0 || filterString === '')
+  transform(recipes: Recipe[] | any[] | undefined, filterString: string, searchDescriptions: boolean, searchIngredients: boolean): any[] | undefined {
+    if (recipes === undefined || recipes.length === 0 || filterString === '')
       return recipes;
+
+    filterString = filterString.toLowerCase();
 
     const filteredRecipes: Recipe[] = [];
     for (const recipe of recipes) {
