@@ -40,8 +40,7 @@ export class RecipeEditComponent implements OnInit {
   // Two-way-bound values
   descriptionValue: string | undefined = this.defaultDescription;
 
-  constructor(private activeRoute: ActivatedRoute, private recipeService: RecipeService, private router: Router,
-              private route: ActivatedRoute) {
+  constructor(private activeRoute: ActivatedRoute, private recipeService: RecipeService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -109,11 +108,11 @@ export class RecipeEditComponent implements OnInit {
 
     if (this.editMode && this.id !== undefined) {
       this.recipeService.recipes[this.id] = recipe;
-      this.router.navigate(['..'], {relativeTo: this.route});
+      this.router.navigate(['..'], {relativeTo: this.activeRoute});
     } else {
       this.recipeService.recipes.push(recipe);
       const redirectId = this.recipeService.recipes.length - 1;
-      this.router.navigate(['..', redirectId], {relativeTo: this.route});
+      this.router.navigate(['..', redirectId], {relativeTo: this.activeRoute});
     }
     this.recipeForm?.reset();
 
@@ -136,7 +135,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['..'], {relativeTo: this.route});
+    this.router.navigate(['..'], {relativeTo: this.activeRoute});
 
   }
 

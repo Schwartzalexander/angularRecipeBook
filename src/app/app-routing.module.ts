@@ -13,6 +13,7 @@ import {UserDetailComponent} from './users/user-detail/user-detail.component';
 import {UserEditComponent} from './users/user-edit/user-edit.component';
 import {UsersComponent} from './users/users.component';
 import {RecipesResolverService} from './services/recipes-resolver.service';
+import {AuthComponent} from './auth/auth.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: 'recipes', pathMatch: 'full'},
@@ -35,6 +36,7 @@ const appRoutes: Routes = [
       {path: ':id/edit', component: UserEditComponent}
     ]
   },
+  {path: 'auth', component: AuthComponent},
   {path: '**', component: Error404Component, data: {message: 'Page not found!'}},
   // Redirection = Bad user experience. The url will be lost
   // {path: '**', redirectTo: '/not-found'}
