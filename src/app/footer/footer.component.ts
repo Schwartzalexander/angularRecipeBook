@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Ingredient } from '../model/ingredient.model';
+import {Component, Input, OnInit} from '@angular/core';
+import {Ingredient} from '../shared/model/ingredient.model';
 
 @Component({
   selector: 'app-footer',
@@ -8,9 +8,10 @@ import { Ingredient } from '../model/ingredient.model';
 })
 export class FooterComponent implements OnInit {
 
+  @Input('lastAddedIngredient') lastAddedIngredient: Ingredient | undefined;
 
-  @Input('lastAddedIngredient') lastAddedIngredient: Ingredient | undefined
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from '@angular/forms';
-import {Ingredient} from 'src/app/model/ingredient.model';
-import {DataService} from 'src/app/services/data.service';
-import {LoggingService} from 'src/app/services/logging.service';
-import {ShoppingService} from 'src/app/services/shopping.service';
+import {Ingredient} from 'src/app/shared/model/ingredient.model';
+import {DataService} from 'src/app/junk/services/data.service';
+import {LoggingService} from 'src/app/shared/logging.service';
+import {ShoppingService} from 'src/app/shopping-list/shopping.service';
 import {Subscription} from 'rxjs';
 
 @Component({

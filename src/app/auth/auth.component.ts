@@ -1,12 +1,12 @@
 import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {User} from '../model/user.model';
+import {User} from '../junk/model/user.model';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthResponseData, AuthService} from '../services/auth.service';
+import {AuthResponseData, AuthService} from './auth.service';
 import {Observable, Subscription} from 'rxjs';
-import {AlertComponent} from '../assets/alert/alert.component';
-import {PlaceholderDirective} from '../assets/placeholder.directive';
-import {ErrorMessageConverterPipe} from '../pipes/error-message-converter.pipe';
+import {AlertComponent} from '../shared/components/alert/alert.component';
+import {PlaceholderDirective} from '../shared/placeholder.directive';
+import {ErrorMessageConverterPipe} from './pipes/error-message-converter.pipe';
 
 @Component({
   selector: 'app-auth',

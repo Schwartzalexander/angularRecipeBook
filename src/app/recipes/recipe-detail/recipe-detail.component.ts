@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Recipe} from 'src/app/model/recipe.model';
-import {DataService} from 'src/app/services/data.service';
-import {LoggingService} from 'src/app/services/logging.service';
-import {RecipeService} from 'src/app/services/recipe.service';
-import {ShoppingService} from 'src/app/services/shopping.service';
+import {Recipe} from 'src/app/recipes/model/recipe.model';
+import {DataService} from 'src/app/junk/services/data.service';
+import {LoggingService} from 'src/app/shared/logging.service';
+import {RecipeService} from 'src/app/recipes/recipe.service';
+import {ShoppingService} from 'src/app/shopping-list/shopping.service';
 
 @Component({
   selector: 'app-recipe-detail',

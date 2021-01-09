@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1>{{user?.name}}</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <div appDropdown class="btn-group">
+      <button type="button" class="btn btn-primary dropdown-toggle">
+        Manage user <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li><a style="cursor: pointer;" [routerLink]="['edit']">Edit user</a></li>
+        <li><a style="cursor: pointer;" (click)="deleteUser()">Delete user</a></li>
+      </ul>
+    </div>
+    <br>
+    <br>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col">Key</th>
+            <th scope="col">Value</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Gender</td>
+            <td>{{ user?.gender}}</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td><a href="mailto:{{ user?.email}}">{{ user?.email}}</a></td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td>{{ user?.password}}</td>
+          </tr>
+          <tr>
+            <td>Corona attitude</td>
+            <td>{{ user?.coronaAttitude == 'for' ? 'For corona' : 'Against corona'}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <h2>Roles</h2>
+        <table class="table" *ngIf="areThereRoles(); else noRoles">
+          <thead>
+          <tr>
+            <th scope="col">Role</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let role of user?.roles">
+            <td>{{role}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <ng-template #noRoles>
+          <p>There are no roles.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+</div>

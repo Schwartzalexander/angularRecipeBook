@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoggingService} from '../services/logging.service';
-import {DataStorageService} from '../services/data-storage.service';
+import {LoggingService} from '../shared/logging.service';
+import {DataStorageService} from '../shared/data-storage.service';
 import {Subject, Subscription} from 'rxjs';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../auth/auth.service';
 
 @Component({
   selector: 'app-header',

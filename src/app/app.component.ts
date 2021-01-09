@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Ingredient} from './model/ingredient.model';
-import {LoggingService} from './services/logging.service';
-import {ShoppingService} from './services/shopping.service';
-import {AuthService} from './services/auth.service';
+import {Ingredient} from './shared/model/ingredient.model';
+import {LoggingService} from './shared/logging.service';
+import {ShoppingService} from './shopping-list/shopping.service';
+import {AuthService} from './auth/auth.service';
 
 @Component({
   selector: 'app-root',

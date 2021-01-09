@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Recipe } from '../model/recipe.model';
-import { LoggingService } from '../services/logging.service';
-import { RecipeService } from '../services/recipe.service';
+import {Component, OnInit} from '@angular/core';
+import {LoggingService} from '../shared/logging.service';
+import {RecipeService} from './recipe.service';
 
 @Component({
   selector: 'app-recipes',
@@ -10,7 +9,8 @@ import { RecipeService } from '../services/recipe.service';
 })
 export class RecipesComponent implements OnInit {
 
-  constructor(private loggingService: LoggingService, private recipeService: RecipeService) { }
+  constructor(private loggingService: LoggingService, private recipeService: RecipeService) {
+  }
 
   ngOnInit(): void {
   }
