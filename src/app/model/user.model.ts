@@ -1,10 +1,19 @@
 export class User {
-    constructor(public name: string, public email: string, public password: string, public gender: string, public roles : string[], public coronaAttitude : string) {
-        this.name = name
-        this.email = email
-        this.password = password
-        this.gender = gender
-        this.roles = roles
-        this.coronaAttitude = coronaAttitude
-    }
+  constructor(public id: string,
+              public name: string,
+              public email: string,
+              public password: string,
+              public gender: string,
+              public roles: string[],
+              public coronaAttitude: string,
+              private Token: string,
+              private tokenExpirationDate?: Date
+  ) {
+  }
+
+  get token(): string {
+    if (!this.tokenExpirationDate || this.tokenExpirationDate < new Date())
+      return '';
+    return this.Token;
+  }
 }

@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {User} from '../model/user.model';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../services/auth.service';
+import {AuthResponseData, AuthService} from '../services/auth.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -39,7 +40,7 @@ export class AuthComponent implements OnInit {
     const email = this.authForm?.value.email;
     const password = this.authForm?.value.password;
 
-    const user = new User('', email, password, '', [], '');
+    const user = new User('', '', email, password, '', [], '', '');
 
     this.errorMessage = '';
     this.isLoading = true;
@@ -48,26 +49,28 @@ export class AuthComponent implements OnInit {
     } else {
       this.signUp(user);
     }
-    //  this.router.navigate(['..', redirectId], {relativeTo: this.route});
-    // this.authForm?.reset();
   }
 
   private signUp(user: User): void {
-    this.authService.signUp(user.email, user.password).subscribe(data => {
-      this.isLoading = false;
-    }, errorMessage => {
-      console.log(errorMessage);
-      this.isLoading = false;
-      this.errorMessage = errorMessage;
-    });
+    const observable = this.authService.signUp(user.email, user.password);
+    this.handleSignUpOrIn(observable);
+
   }
 
   private signIn(user: User): void {
-    this.authService.signIn(user.email, user.password).subscribe(data => {
-      this.isLoading = false;
+    const observable = this.authService.signIn(user.email, user.password);
+    this.handleSignUpOrIn(observable);
+  }
+
+  private handleSignUpOrIn(observable: Observable<AuthResponseData>): void {
+    this.isLoading = false;
+    observable.subscribe(data => {
+      // on success:
+      this.authForm?.reset();
+      this.router.navigate(['/recipes']);
     }, errorMessage => {
+      // on error:
       console.log(errorMessage);
-      this.isLoading = false;
       this.errorMessage = errorMessage;
     });
   }

@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {LoggingService} from '../services/logging.service';
 import {DataStorageService} from '../services/data-storage.service';
-import {Subject} from 'rxjs';
+import {Subject, Subscription} from 'rxjs';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -13,10 +14,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   recipesSuccessSubject: Subject<any> = new Subject<any>();
   recipesErrorSubject: Subject<any> = new Subject<any>();
 
-  constructor(private loggingService: LoggingService, private dataStorageService: DataStorageService) {
+  isAuthenticated = false;
+  userSubject: Subscription | undefined;
+
+  constructor(private loggingService: LoggingService, private dataStorageService: DataStorageService, private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    this.userSubject = this.authService.userSubject.subscribe(user => {
+      this.isAuthenticated = !!user; // Does the same as: = !user ? false : true;
+    });
   }
 
   onSaveData(): void {
@@ -43,5 +50,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.recipesSuccessSubject.unsubscribe();
     this.recipesErrorSubject.unsubscribe();
+    this.userSubject?.unsubscribe();
+  }
+
+  logout(): void {
+    this.isAuthenticated = false;
   }
 }

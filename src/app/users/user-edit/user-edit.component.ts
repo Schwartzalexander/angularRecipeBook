@@ -95,10 +95,10 @@ export class UserEditComponent implements OnInit {
     const gender = this.userForm?.value.gender;
     const roles = this.userForm?.value.roles;
     const coronaAttitude = this.userForm?.value.corona;
-    const user = new User(name, email, password, gender, roles, coronaAttitude);
+    const index = this.userService.users.length - 1;
+    const user = new User(index + '', name, email, password, gender, roles, coronaAttitude, '');
     this.userService.users.push(user);
     this.userForm?.reset();
-    const index = this.userService.users.length - 1;
     this.router.navigate(['..', index], {relativeTo: this.route});
   }
 
