@@ -10,7 +10,7 @@ import {JunkComponent} from './junk.component';
 
 const junkRoutes: Routes = [
   {
-    path: 'junk', component: JunkComponent, children: [
+    path: '', component: JunkComponent, children: [
       {path: 'stupid-game', component: GameComponent},
       {path: 'oberservables', component: OberservablesComponent},
       {

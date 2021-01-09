@@ -15,7 +15,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     RouterModule,
     FormsModule,
     RouterModule.forChild([
-      {path: 'shoppingList', component: ShoppingListComponent},
+      {path: '', component: ShoppingListComponent},
     ]),
     ReactiveFormsModule
   ]
