@@ -5,16 +5,14 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FooterComponent} from './footer/footer.component';
 import {HeaderComponent} from './header/header.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {LoggingInterceptorService} from './shared/interceptors/logging-interceptor.service';
-import {ErrorMessageConverterPipe} from './auth/pipes/error-message-converter.pipe';
-import {AuthInterceptorService} from './auth/interceptors/auth-interceptor.service';
+import {HttpClientModule} from '@angular/common/http';
 import {RecipesModule} from './recipes/recipes.module';
 import {ShoppingListModule} from './shopping-list/shopping-list.module';
 import {ErrorsModule} from './errors/errors.module';
 import {JunkModule} from './junk/junk.module';
 import {AuthModule} from './auth/auth.module';
 import {SharedModule} from './shared/shared.module';
+import {CoreModule} from './core.module';
 
 @NgModule({
   declarations: [
@@ -34,14 +32,11 @@ import {SharedModule} from './shared/shared.module';
     ShoppingListModule,
     RecipesModule,
     AppRoutingModule,
-    ErrorsModule
+    ErrorsModule,
+    CoreModule
   ],
   exports: [],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptorService, multi: true},
-    ErrorMessageConverterPipe
-  ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule {
