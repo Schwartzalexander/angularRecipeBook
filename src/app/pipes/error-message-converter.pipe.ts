@@ -5,9 +5,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 })
 export class ErrorMessageConverterPipe implements PipeTransform {
 
-  transform(value: unknown, ...args: unknown[]): unknown {
-    if (typeof value !== 'string')
-      return value;
+  transform(value: string, ...args: string[]): string {
 
     value = value.replace('EMAIL_EXISTS', 'The entered email address already exists. Try logging in instead. If you forgot your' +
       ' password, you\'re fucked.')
