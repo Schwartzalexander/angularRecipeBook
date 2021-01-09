@@ -15,7 +15,7 @@ export interface AuthResponseData {
   registered?: boolean;
 }
 
-const LOCAL_STORAGE_KEY = 'userData';
+const LOCAL_STORAGE_KEY_USER_DATA = 'userData';
 const URL_SIGN_UP = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
 const URL_SIGN_IN = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
 const API_KEY = 'AIzaSyALO01jLzk5PTc-m0Wynz3nEvZRzXJ07tI';
@@ -26,6 +26,7 @@ const API_KEY = 'AIzaSyALO01jLzk5PTc-m0Wynz3nEvZRzXJ07tI';
 export class AuthService {
 
   userSubject = new BehaviorSubject<User | null>(null);
+  tokenExpirationTimer: any | undefined;
 
   constructor(private http: HttpClient, private router: Router) {
   }
@@ -43,7 +44,7 @@ export class AuthService {
   }
 
   autoLogin(): void {
-    const userDataRaw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const userDataRaw = localStorage.getItem(LOCAL_STORAGE_KEY_USER_DATA);
     if (!userDataRaw) {
       return;
     }
@@ -70,6 +71,8 @@ export class AuthService {
       userData.tokenExpirationDate);
     if (loadedUser.token) {
       this.userSubject.next(loadedUser);
+      if (userData.tokenExpirationDate)
+        this.autoLogout(userData.tokenExpirationDate.getTime() - new Date().getTime());
     }
   }
 
@@ -84,7 +87,8 @@ export class AuthService {
     const expirationDate = new Date(new Date().getTime() + responseData.expiresIn * 1000);
     const user = new User(responseData.localId, '', responseData.email, '', '', [], '', responseData.idToken, expirationDate);
     this.userSubject.next(user);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(user));
+    localStorage.setItem(LOCAL_STORAGE_KEY_USER_DATA, JSON.stringify(user));
+    this.autoLogout(responseData.expiresIn * 1000);
   }
 
   private handleError(errorResponse: HttpErrorResponse): Observable<never> {
@@ -100,6 +104,13 @@ export class AuthService {
   logout(): void {
     this.userSubject.next(null);
     this.router.navigate(['/auth']);
-    localStorage.setItem(LOCAL_STORAGE_KEY, '');
+    localStorage.removeItem(LOCAL_STORAGE_KEY_USER_DATA);
+    this.tokenExpirationTimer.clear();
+  }
+
+  autoLogout(expirationDuration: number): void {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
   }
 }
