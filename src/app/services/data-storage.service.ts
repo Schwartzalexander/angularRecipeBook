@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {RecipeService} from './recipe.service';
 import {Observable, Subject} from 'rxjs';
 import {Recipe} from '../model/recipe.model';
-import {exhaustMap, take, tap} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 import {AuthService} from './auth.service';
 
 @Injectable({
@@ -30,13 +30,7 @@ export class DataStorageService {
   }
 
   fetchRecipesObservable(): Observable<Recipe[]> {
-    return this.authService.userSubject.pipe(
-      take(1),
-      exhaustMap(user => {
-        return this.http.get<Recipe[]>(this.url, {
-          params: new HttpParams().set('auth', user !== null ? user.token : '')
-        });
-      }),
+    return this.http.get<Recipe[]>(this.url).pipe(
       tap(recipes => {
         // Clear the original array
         this.recipeService.recipes.length = 0;

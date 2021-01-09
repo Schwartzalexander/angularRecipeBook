@@ -36,8 +36,9 @@ import {FilterPipe} from './recipes/recipe-list/filter.pipe';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {LoggingInterceptorService} from './interceptors/logging-interceptor.service';
 import {AuthComponent} from './auth/auth.component';
-import { LoadingSpinnerComponent } from './assets/loading-spinner/loading-spinner.component';
-import { ErrorMessageConverterPipe } from './pipes/error-message-converter.pipe';
+import {LoadingSpinnerComponent} from './assets/loading-spinner/loading-spinner.component';
+import {ErrorMessageConverterPipe} from './pipes/error-message-converter.pipe';
+import {AuthInterceptorService} from './interceptors/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,7 @@ import { ErrorMessageConverterPipe } from './pipes/error-message-converter.pipe'
     HttpClientModule
   ],
   providers: [
-    // {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
