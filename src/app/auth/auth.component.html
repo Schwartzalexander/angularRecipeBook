@@ -1,13 +1,21 @@
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <!--    First approach: Show error message in div: -->
     <!--    <div class="alert alert-danger" *ngIf="errorMessage">-->
     <!--      <p>{{errorMessage | errorMessageConverter}}</p>-->
     <!--    </div>-->
-    <app-alert [message]="errorMessage | errorMessageConverter" *ngIf="errorMessage"
-               (close)="errorMessage = ''"></app-alert>
+
+    <!--    Second approach: Show error message in a static component: -->
+    <!--    <app-alert [message]="errorMessage | errorMessageConverter" *ngIf="errorMessage"-->
+    <!--               (close)="errorMessage = ''"></app-alert>-->
+
+    <!--Third approach: Create error message alert programmatically: -->
+    <ng-template appPlaceholder></ng-template>
+
     <div *ngIf="isLoading" style="text-align: center;">
       <app-loading-spinner></app-loading-spinner>
     </div>
+
     <form (ngSubmit)="onSubmit()" [formGroup]="authForm" *ngIf="authForm !== undefined && !isLoading">
       <div class="form-group">
         <label for="email">Email</label>

@@ -39,7 +39,8 @@ import {AuthComponent} from './auth/auth.component';
 import {LoadingSpinnerComponent} from './assets/loading-spinner/loading-spinner.component';
 import {ErrorMessageConverterPipe} from './pipes/error-message-converter.pipe';
 import {AuthInterceptorService} from './interceptors/auth-interceptor.service';
-import { AlertComponent } from './assets/alert/alert.component';
+import {AlertComponent} from './assets/alert/alert.component';
+import {PlaceholderDirective} from './assets/placeholder.directive';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { AlertComponent } from './assets/alert/alert.component';
     AuthComponent,
     LoadingSpinnerComponent,
     ErrorMessageConverterPipe,
-    AlertComponent
+    AlertComponent,
+    PlaceholderDirective
   ],
   imports: [
     BrowserModule,
@@ -89,7 +91,8 @@ import { AlertComponent } from './assets/alert/alert.component';
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptorService, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptorService, multi: true},
+    ErrorMessageConverterPipe
   ],
   bootstrap: [AppComponent]
 })
