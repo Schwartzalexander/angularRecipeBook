@@ -4,21 +4,22 @@ import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {User} from '../junk/model/user.model';
 import {Router} from '@angular/router';
+import {environment} from '../../environments/environment';
 
 export interface AuthResponseData {
   kind: string;
   idToken: string;
   email: string;
-  refreshTOken: string;
+  refreshToken: string;
   expiresIn: number;
   localId: string;
   registered?: boolean;
 }
 
-const LOCAL_STORAGE_KEY_USER_DATA = 'userData';
-const URL_SIGN_UP = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
-const URL_SIGN_IN = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
-const API_KEY = 'AIzaSyALO01jLzk5PTc-m0Wynz3nEvZRzXJ07tI';
+const LOCAL_STORAGE_KEY_USER_DATA = environment.localStorageKeyUserData;
+const URL_SIGN_UP = environment.urlSignUp;
+const URL_SIGN_IN = environment.urlSignIn;
+const API_KEY = environment.firebaseApiKey;
 
 @Injectable({
   providedIn: 'root'

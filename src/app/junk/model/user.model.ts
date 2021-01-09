@@ -12,7 +12,7 @@ export class User {
   }
 
   get token(): string {
-    if (!this.tokenExpirationDate || this.tokenExpirationDate < new Date())
+    if (!this.tokenExpirationDate || this.tokenExpirationDate.getTime() < new Date().getTime())
       return '';
     return this.Token;
   }
