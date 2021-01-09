@@ -3,6 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {User} from '../model/user.model';
+import {Router} from '@angular/router';
 
 export interface AuthResponseData {
   kind: string;
@@ -24,7 +25,7 @@ export class AuthService {
   apiKey = 'AIzaSyALO01jLzk5PTc-m0Wynz3nEvZRzXJ07tI';
   userSubject = new BehaviorSubject<User | null>(null);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   signUp(email: string, password: string): Observable<AuthResponseData> {
@@ -57,5 +58,13 @@ export class AuthService {
       return throwError('An unknown error occurred.');
     else
       return throwError(errorResponse.error.error.message);
+  }
+
+  /**
+   * Logs the user out by sending null to the subject.
+   */
+  logout(): void {
+    this.userSubject.next(null);
+    this.router.navigate(['/auth']);
   }
 }
