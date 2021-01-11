@@ -56,6 +56,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       return;
     }
     this.shoppingService.addIngredients(this.recipe.ingredients);
+    this.router.navigate(['/shoppingList']);
   }
 
   areThereIngredients(): boolean {

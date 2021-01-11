@@ -8,10 +8,6 @@ export interface State {
   editedIndex: number | undefined;
 }
 
-export interface AppState {
-  shoppingList: State;
-}
-
 export const initialState: State = {
   ingredients: [],
   editedIngredient: undefined,
@@ -87,7 +83,7 @@ export function shoppingListReducer(state: State | undefined, action: Action) {
 }
 
 //
-// export function shoppingListReducer(state = initialState, action: AddIngredient): any {
+// export function authReducer(state = initialState, action: AddIngredient): any {
 //   switch (action.type) {
 //     case ADD_INGREDIENT: {
 //       // Make an immutable copy. State changes must always be immutable by convention.

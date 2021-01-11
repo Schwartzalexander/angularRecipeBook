@@ -9,8 +9,8 @@ import {ErrorsModule} from './errors/errors.module';
 import {AuthModule} from './auth/auth.module';
 import {SharedModule} from './shared/shared.module';
 import {CoreModule} from './core.module';
-import * as fromShoppingList from './shopping-list/store/shopping-list.reducer';
 import {StoreModule} from '@ngrx/store';
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
   declarations: [
@@ -21,17 +21,16 @@ import {StoreModule} from '@ngrx/store';
   imports: [
     BrowserModule,
     HttpClientModule,
-    StoreModule.forRoot({shoppingList: fromShoppingList.shoppingListReducer}),
-    // StoreModule.forRoot({shoppingList: shoppingListReducer}),
     AuthModule,
+    StoreModule.forRoot(fromApp.appReducer),
     SharedModule,
     AppRoutingModule,
     ErrorsModule,
     CoreModule
   ],
   exports: [],
-
   bootstrap: [AppComponent]
 })
+
 export class AppModule {
 }
