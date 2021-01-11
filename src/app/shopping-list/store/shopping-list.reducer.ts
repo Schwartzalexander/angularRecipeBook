@@ -17,6 +17,7 @@ export const initialState: State = {
 const reducer = createReducer(
   initialState,
   on(addIngredient, (state, {ingredient}) => {
+    // Make an immutable copy. State changes must always be immutable by convention.
     const newState = {...state, ingredients: [...state.ingredients, ingredient]};
     console.log('addIngredient:');
     console.log(state);
@@ -81,17 +82,3 @@ const reducer = createReducer(
 export function shoppingListReducer(state: State | undefined, action: Action) {
   return reducer(state, action);
 }
-
-//
-// export function authReducer(state = initialState, action: AddIngredient): any {
-//   switch (action.type) {
-//     case ADD_INGREDIENT: {
-//       // Make an immutable copy. State changes must always be immutable by convention.
-//       return {
-//         ...state,
-//         ingredients: [...state.ingredients, action.payload]
-//       };
-//     }
-//   }
-//
-// }
