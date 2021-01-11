@@ -1,11 +1,12 @@
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {login, loginFailed, loginStart} from './auth.actions';
+import {autoLogin, login, loginFailed, loginStart, logout, signUpStart} from './auth.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
-import {API_KEY, AuthResponseData, URL_SIGN_IN} from '../auth.service';
+import {API_KEY, AuthResponseData, LOCAL_STORAGE_KEY_USER_DATA, URL_SIGN_IN, URL_SIGN_UP} from '../auth.service';
 import {of} from 'rxjs';
 import {Router} from '@angular/router';
+import {User} from '../../junk/model/user.model';
 
 @Injectable()
 export class AuthEffects {
@@ -13,59 +14,103 @@ export class AuthEffects {
   constructor(private actions: Actions, private http: HttpClient, private router: Router) {
   }
 
-  // loginStart = createEffect((authData: loginStart) => {
-  //   return this.actions.pipe(
-  //     ofType(loginStart),
-  //     mergeMap((loginData: { email: string, password: string }) => {
-  //       return this.http.post<AuthResponseData>(URL_SIGN_IN + '?key=' + API_KEY, {
-  //         email: loginData.email,
-  //         password: loginData.password,
-  //         returnSecureToken: 'true'
-  //       });
-  //     })
-  //   );
-  // });
-
-  // getLoginStart: Observable<Action> = createEffect(() =>
-  //   this.actions.pipe(
-  //     ofType(loginStart),
-  //     mergeMap((value: { email: string, password: string }, index: number) => {
-  //         return this.http.post<AuthResponseData>(URL_SIGN_IN + '?key=' + API_KEY, {
-  //           email: loginData.email,
-  //           password: loginData.password,
-  //           returnSecureToken: 'true'
-  //         });
-  //       }
-  //     )
-  //   )
-  // );
-
-  sendLoginData = createEffect(() => this.actions.pipe(
-    ofType(loginStart),
-    switchMap((loginData: { email: string, password: string }) => {
-      return this.http.post<AuthResponseData>(URL_SIGN_IN + '?key=' + API_KEY, {
-        email: loginData.email,
-        password: loginData.password,
+  sendSignUpData = createEffect(() => this.actions.pipe(
+    ofType(signUpStart),
+    switchMap((signUpData: { email: string, password: string, redirectUrl: string }) => {
+      return this.http.post<AuthResponseData>(URL_SIGN_UP + '?key=' + API_KEY, {
+        email: signUpData.email,
+        password: signUpData.password,
         returnSecureToken: 'true'
       }).pipe(
-        map((responseData) => {
-          const expirationTimestamp = new Date().getTime() + responseData.expiresIn * 1000;
-          return login({email: responseData.email, userId: responseData.localId, token: responseData.idToken, expirationTimestamp});
-        }),
-        catchError((error) => {
-          return of(loginFailed(error));
-        }),
+        map(responseData => handleAuthentication(+responseData.expiresIn, responseData.email, responseData.localId, responseData.idToken,
+          signUpData.redirectUrl)),
+        catchError((errorResponse) => handleError(errorResponse)),
       );
     })
     )
   );
 
-  authSuccess = createEffect(() => this.actions.pipe(
-    ofType(login),
-    tap(() => {
-        this.router.navigate(['/']);
+  sendLoginData = createEffect(() => this.actions.pipe(
+    ofType(loginStart),
+    switchMap((loginData: { email: string, password: string, redirectUrl: string }) => {
+      return this.http.post<AuthResponseData>(URL_SIGN_IN + '?key=' + API_KEY, {
+        email: loginData.email,
+        password: loginData.password,
+        returnSecureToken: 'true'
+      }).pipe(
+        map(responseData => handleAuthentication(+responseData.expiresIn, responseData.email, responseData.localId, responseData.idToken,
+          loginData.redirectUrl)),
+        catchError((errorResponse) => handleError(errorResponse)),
+      );
+    })
+    )
+  );
+
+  authRedirect = createEffect(() => this.actions.pipe(
+    ofType(login, logout),
+    tap((data) => {
+        this.router.navigate([data.redirectUrl]);
       }
     )
   ), {dispatch: false});
 
+  autoLogin = createEffect(() => this.actions.pipe(
+    ofType(autoLogin),
+    map(() => {
+        const userDataRaw = localStorage.getItem(LOCAL_STORAGE_KEY_USER_DATA);
+        if (!userDataRaw)
+          return {type: 'EMPTY'};
+
+        const userData: {
+          id: string,
+          name: string,
+          email: string,
+          password: string,
+          gender: string,
+          roles: string[],
+          coronaAttitude: string,
+          Token: string,
+          tokenExpirationTimestamp?: number
+        } = JSON.parse(userDataRaw);
+        const loadedUser = new User(userData.id, userData.name, userData.email, userData.password, userData.gender, userData.roles,
+          userData.coronaAttitude, userData.Token, userData.tokenExpirationTimestamp);
+        if (loadedUser.token && userData.tokenExpirationTimestamp !== undefined) {
+          return login({
+            userId: loadedUser.id,
+            email: loadedUser.email,
+            token: loadedUser.token,
+            expirationTimestamp: userData.tokenExpirationTimestamp,
+            redirectUrl: '/'
+          });
+        }
+        return {type: 'EMPTY'};
+
+        // if (userData.tokenExpirationTimestamp)
+        //   this.autoLogout(userData.tokenExpirationTimestamp - new Date().getTime());
+      }
+    )
+  ));
+
+  logout = createEffect(() => this.actions.pipe(
+    ofType(logout),
+    tap(() => {
+      localStorage.removeItem(LOCAL_STORAGE_KEY_USER_DATA);
+    })
+    )
+  );
 }
+
+const handleAuthentication = (expiresIn: number, email: string, userId: string, token: string, redirectUrl: string) => {
+  const expirationTimestamp = new Date().getTime() + expiresIn * 1000;
+  const user = new User(userId, '', email, '', '', [], '', token, expirationTimestamp);
+  localStorage.setItem(LOCAL_STORAGE_KEY_USER_DATA, JSON.stringify(user));
+  return login({email, userId, token, expirationTimestamp, redirectUrl});
+};
+
+const handleError = (errorResponse: any) => {
+  if (!errorResponse || !errorResponse.error || !errorResponse.error.error || !errorResponse.error.error.message)
+    return of(loginFailed({error: 'An unknown error occurred.'}));
+  else
+    return of(loginFailed({error: errorResponse.error.error.message}));
+};
+

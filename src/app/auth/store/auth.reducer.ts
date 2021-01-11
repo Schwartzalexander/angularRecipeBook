@@ -1,6 +1,6 @@
 import {Action, ActionReducer, createReducer, on} from '@ngrx/store';
 import {User} from '../../junk/model/user.model';
-import {login, loginFailed, loginStart, logout} from './auth.actions';
+import {login, loginFailed, loginStart, logout, signUpStart} from './auth.actions';
 
 export interface State {
   user: User | undefined;
@@ -16,6 +16,14 @@ export const initialState: State = {
 
 const reducer: ActionReducer<State, Action> = createReducer(
   initialState,
+  on(signUpStart, (state, {email, password}) => {
+    // Make an immutable copy. State changes must always be immutable by convention.
+    const newState = {...state, error: undefined, loading: true};
+    console.log('signUpStart:');
+    console.log(state);
+    console.log(newState);
+    return newState;
+  }),
   on(loginStart, (state, {email, password}) => {
     // Make an immutable copy. State changes must always be immutable by convention.
     const newState = {...state, error: undefined, loading: true};
@@ -23,9 +31,8 @@ const reducer: ActionReducer<State, Action> = createReducer(
     console.log(state);
     console.log(newState);
     return newState;
-  })
-  , on(login, (state, {email, expirationTimestamp, token, userId}) => {
-    // Make an immutable copy. State changes must always be immutable by convention.
+  }),
+  on(login, (state, {email, expirationTimestamp, token, userId}) => {
     const user = new User(userId, '', email, '', '', [], '', token, expirationTimestamp);
     const newState = {...state, user, error: undefined, loading: false};
     console.log('login:');
@@ -34,7 +41,6 @@ const reducer: ActionReducer<State, Action> = createReducer(
     return newState;
   }),
   on(loginFailed, (state, {error}) => {
-    // Make an immutable copy. State changes must always be immutable by convention.
     const newState = {...state, user: undefined, error, loading: false};
     console.log('loginFailed:');
     console.log(state);

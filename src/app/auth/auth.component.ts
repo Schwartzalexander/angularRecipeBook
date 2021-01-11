@@ -1,8 +1,7 @@
 import {Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {User} from '../junk/model/user.model';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthResponseData, AuthService} from './auth.service';
+import {AuthService} from './auth.service';
 import {Observable, Subscription} from 'rxjs';
 import {AlertComponent} from '../shared/components/alert/alert.component';
 import {PlaceholderDirective} from '../shared/placeholder.directive';
@@ -10,7 +9,7 @@ import {ErrorMessageConverterPipe} from './pipes/error-message-converter.pipe';
 import {Store} from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
 import {State} from './store/auth.reducer';
-import {loginStart} from './store/auth.actions';
+import {loginStart, signUpStart} from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -24,6 +23,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   error: string | undefined = '';
   @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective | undefined;
   private closeSub: Subscription | undefined;
+  private storeSub: Subscription | undefined;
 
   authObservable: Observable<State>;
 
@@ -36,9 +36,11 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authForm = this.createForm();
-    this.authObservable.subscribe(authState => {
+    this.storeSub = this.authObservable.subscribe(authState => {
       this.isLoading = authState.loading;
       this.error = authState.error;
+      if (this.error)
+        this.showErrorAlert(this.error);
     });
   }
 
@@ -59,35 +61,11 @@ export class AuthComponent implements OnInit, OnDestroy {
     const email = this.authForm?.value.email;
     const password = this.authForm?.value.password;
 
-    const user = new User('', '', email, password, '', [], '', '');
-
-    this.error = '';
-    this.isLoading = true;
     if (this.isLoginMode) {
-      this.store.dispatch(loginStart({email, password}));
+      this.store.dispatch(loginStart({email, password, redirectUrl: '/recipes'}));
     } else {
-      this.signUp(user);
+      this.store.dispatch(signUpStart({email, password, redirectUrl: '/recipes'}));
     }
-  }
-
-  private signUp(user: User): void {
-    const observable = this.authService.signUp(user.email, user.password);
-    this.handleSignUpOrIn(observable);
-
-  }
-
-  private handleSignUpOrIn(observable: Observable<AuthResponseData>): void {
-    this.isLoading = false;
-    observable.subscribe(data => {
-      // on success:
-      this.authForm?.reset();
-      this.router.navigate(['/recipes']);
-    }, errorMessage => {
-      // on error:
-      console.log(errorMessage);
-      this.error = errorMessage;
-      this.showErrorAlert(errorMessage);
-    });
   }
 
   private showErrorAlert(errorMessage: string): void {
@@ -106,5 +84,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.closeSub?.unsubscribe();
+    this.storeSub?.unsubscribe();
   }
 }
