@@ -17,14 +17,11 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
 
   editMode = false;
   editedIngredient: Ingredient | undefined;
-
   ingredientsSubscription: Subscription | undefined;
 
   // Default values
   defaultName = 'Beer';
   defaultAmount = 20;
-
-  subscription: Subscription | undefined;
 
   constructor(private loggingService: LoggingService, private dataService: DataService, private shoppingService: ShoppingService) {
   }
@@ -47,7 +44,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
     this.shoppingService.stopEdit();
     this.ingredientsSubscription?.unsubscribe();
   }
