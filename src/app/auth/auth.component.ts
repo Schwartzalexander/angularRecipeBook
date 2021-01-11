@@ -7,6 +7,10 @@ import {Observable, Subscription} from 'rxjs';
 import {AlertComponent} from '../shared/components/alert/alert.component';
 import {PlaceholderDirective} from '../shared/placeholder.directive';
 import {ErrorMessageConverterPipe} from './pipes/error-message-converter.pipe';
+import {Store} from '@ngrx/store';
+import * as fromApp from '../store/app.reducer';
+import {State} from './store/auth.reducer';
+import {loginStart} from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -21,7 +25,13 @@ export class AuthComponent implements OnInit, OnDestroy {
   @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective | undefined;
   private closeSub: Subscription | undefined;
 
-  constructor(private activeRoute: ActivatedRoute, private router: Router, private authService: AuthService, private componentFactoryResolver: ComponentFactoryResolver, private errorMessageConverter: ErrorMessageConverterPipe) {
+  authObservable: Observable<State>;
+
+  constructor(private activeRoute: ActivatedRoute, private router: Router, private authService: AuthService,
+              private componentFactoryResolver: ComponentFactoryResolver, private errorMessageConverter: ErrorMessageConverterPipe,
+              private store: Store<fromApp.AppState>) {
+    this.authObservable = this.store.select(state => state.auth);
+
   }
 
   ngOnInit(): void {
@@ -50,7 +60,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
     this.isLoading = true;
     if (this.isLoginMode) {
-      this.signIn(user);
+      this.store.dispatch(loginStart({email, password}));
     } else {
       this.signUp(user);
     }
@@ -60,11 +70,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     const observable = this.authService.signUp(user.email, user.password);
     this.handleSignUpOrIn(observable);
 
-  }
-
-  private signIn(user: User): void {
-    const observable = this.authService.signIn(user.email, user.password);
-    this.handleSignUpOrIn(observable);
   }
 
   private handleSignUpOrIn(observable: Observable<AuthResponseData>): void {

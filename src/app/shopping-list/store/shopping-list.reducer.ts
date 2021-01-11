@@ -1,5 +1,5 @@
 import {addIngredient, addIngredients, deleteIngredient, startEdit, stopEdit, updateIngredient} from './shopping-list.actions';
-import {Action, createReducer, on} from '@ngrx/store';
+import {Action, ActionReducer, createReducer, on} from '@ngrx/store';
 import {Ingredient} from '../../shared/model/ingredient.model';
 
 export interface State {
@@ -14,7 +14,7 @@ export const initialState: State = {
   editedIndex: undefined
 };
 
-const reducer = createReducer(
+const reducer: ActionReducer<State, Action> = createReducer(
   initialState,
   on(addIngredient, (state, {ingredient}) => {
     // Make an immutable copy. State changes must always be immutable by convention.
@@ -78,7 +78,6 @@ const reducer = createReducer(
   }),
 );
 
-// tslint:disable-next-line:typedef
-export function shoppingListReducer(state: State | undefined, action: Action) {
+export function shoppingListReducer(state: State | undefined, action: Action): State {
   return reducer(state, action);
 }

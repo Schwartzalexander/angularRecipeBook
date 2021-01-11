@@ -14,7 +14,7 @@ export class ShoppingService {
   ingredientsObservable: Observable<State>;
 
   constructor(private store: Store<fromApp.AppState>) {
-    this.ingredientsObservable = this.store.select('shoppingList');
+    this.ingredientsObservable = this.store.select(state => state.shoppingList);
   }
 
   addIngredient(ingredient: Ingredient): void {

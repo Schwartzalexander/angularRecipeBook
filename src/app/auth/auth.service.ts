@@ -18,12 +18,13 @@ export interface AuthResponseData {
   expiresIn: number;
   localId: string;
   registered?: boolean;
+  type: string;
 }
 
-const LOCAL_STORAGE_KEY_USER_DATA = environment.localStorageKeyUserData;
-const URL_SIGN_UP = environment.urlSignUp;
-const URL_SIGN_IN = environment.urlSignIn;
-const API_KEY = environment.firebaseApiKey;
+export const LOCAL_STORAGE_KEY_USER_DATA = environment.localStorageKeyUserData;
+export const URL_SIGN_UP = environment.urlSignUp;
+export const URL_SIGN_IN = environment.urlSignIn;
+export const API_KEY = environment.firebaseApiKey;
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class AuthService {
   authObservable: Observable<State>;
 
   constructor(private http: HttpClient, private router: Router, private store: Store<fromApp.AppState>) {
-    this.authObservable = this.store.select('auth');
+    this.authObservable = this.store.select(state => state.auth);
   }
 
   signUp(email: string, password: string): Observable<AuthResponseData> {
@@ -80,12 +81,13 @@ export class AuthService {
     }
   }
 
-  signIn(email: string, password: string): Observable<AuthResponseData> {
-    return this.http.post<AuthResponseData>(URL_SIGN_IN + '?key=' + API_KEY, {email, password, returnSecureToken: 'true'})
-      .pipe(catchError(this.handleError), tap(responseData => {
-        this.handleAuthentication(responseData);
-      }));
-  }
+  //
+  // signIn(email: string, password: string): Observable<AuthResponseData> {
+  //   return this.http.post<AuthResponseData>(URL_SIGN_IN + '?key=' + API_KEY, {email, password, returnSecureToken: 'true'})
+  //     .pipe(catchError(this.handleError), tap(responseData => {
+  //       this.handleAuthentication(responseData);
+  //     }));
+  // }
 
   private handleAuthentication(responseData: AuthResponseData): any {
     const expirationDate = new Date(new Date().getTime() + responseData.expiresIn * 1000);
