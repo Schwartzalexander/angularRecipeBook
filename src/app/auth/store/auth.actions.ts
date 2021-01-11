@@ -1,13 +1,4 @@
-// export const ADD_INGREDIENT = 'ADD_INGREDIENT';
-//
-// export class AddIngredient implements Action {
-//   readonly type = ADD_INGREDIENT;
-//   payload?: Ingredient;
-// }
+import {createAction, props} from '@ngrx/store';
 
-// export const addIngredient = createAction('Adding ingredient', props<{ ingredient: Ingredient }>());
-// export const addIngredients = createAction('Adding ingredients', props<{ ingredients: Ingredient[] }>());
-// export const updateIngredient = createAction('Updating ingredient', props<{ ingredient: Ingredient }>());
-// export const deleteIngredient = createAction('Deleting ingredient');
-// export const startEdit = createAction('Starting editing ingredient', props<{ id: number }>());
-// export const stopEdit = createAction('Stopping editing ingredient');
+export const login = createAction('Logging in', props<{ email: string, userId: string, token: string, expirationTimestamp: number }>());
+export const logout = createAction('Logging out');

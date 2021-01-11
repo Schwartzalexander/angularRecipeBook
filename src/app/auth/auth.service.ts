@@ -1,10 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {User} from '../junk/model/user.model';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
+import * as fromApp from '../store/app.reducer';
+import {Store} from '@ngrx/store';
+import {login, logout} from './store/auth.actions';
+import {State} from './store/auth.reducer';
 
 export interface AuthResponseData {
   kind: string;
@@ -26,10 +30,12 @@ const API_KEY = environment.firebaseApiKey;
 })
 export class AuthService {
 
-  userSubject = new BehaviorSubject<User | null>(null);
   tokenExpirationTimer: any | undefined;
 
-  constructor(private http: HttpClient, private router: Router) {
+  authObservable: Observable<State>;
+
+  constructor(private http: HttpClient, private router: Router, private store: Store<fromApp.AppState>) {
+    this.authObservable = this.store.select('auth');
   }
 
   signUp(email: string, password: string): Observable<AuthResponseData> {
@@ -60,18 +66,15 @@ export class AuthService {
       Token: string,
       tokenExpirationTimestamp?: number
     } = JSON.parse(userDataRaw);
-    const loadedUser = new User(
-      userData.id,
-      userData.name,
-      userData.email,
-      userData.password,
-      userData.gender,
-      userData.roles,
-      userData.coronaAttitude,
-      userData.Token,
-      userData.tokenExpirationTimestamp);
-    if (loadedUser.token) {
-      this.userSubject.next(loadedUser);
+    const loadedUser = new User(userData.id, userData.name, userData.email, userData.password, userData.gender, userData.roles,
+      userData.coronaAttitude, userData.Token, userData.tokenExpirationTimestamp);
+    if (loadedUser.token && userData.tokenExpirationTimestamp !== undefined) {
+      this.store.dispatch(login({
+        userId: loadedUser.id,
+        email: loadedUser.email,
+        token: loadedUser.token,
+        expirationTimestamp: userData.tokenExpirationTimestamp
+      }));
       if (userData.tokenExpirationTimestamp)
         this.autoLogout(userData.tokenExpirationTimestamp - new Date().getTime());
     }
@@ -87,7 +90,12 @@ export class AuthService {
   private handleAuthentication(responseData: AuthResponseData): any {
     const expirationDate = new Date(new Date().getTime() + responseData.expiresIn * 1000);
     const user = new User(responseData.localId, '', responseData.email, '', '', [], '', responseData.idToken, expirationDate.getTime());
-    this.userSubject.next(user);
+    this.store.dispatch(login({
+      userId: user.id,
+      email: user.email,
+      token: user.token,
+      expirationTimestamp: expirationDate.getTime()
+    }));
     localStorage.setItem(LOCAL_STORAGE_KEY_USER_DATA, JSON.stringify(user));
     this.autoLogout(responseData.expiresIn * 1000);
   }
@@ -103,10 +111,10 @@ export class AuthService {
    * Logs the user out by sending null to the subject.
    */
   logout(): void {
-    this.userSubject.next(null);
+    this.store.dispatch(logout());
     this.router.navigate(['/auth']);
     localStorage.removeItem(LOCAL_STORAGE_KEY_USER_DATA);
-    this.tokenExpirationTimer.clear();
+    clearTimeout(this.tokenExpirationTimer);
   }
 
   autoLogout(expirationDuration: number): void {

@@ -1,5 +1,6 @@
-import {Action, createReducer} from '@ngrx/store';
+import {Action, createReducer, on} from '@ngrx/store';
 import {User} from '../../junk/model/user.model';
+import {login, logout} from './auth.actions';
 
 export interface State {
   user: User | undefined;
@@ -11,20 +12,22 @@ export const initialState: State = {
 
 const reducer = createReducer(
   initialState,
-  // on(addIngredient, (state, {ingredient}) => {
-  //   const newState = {...state, ingredients: [...state.ingredients, ingredient]};
-  //   console.log('addIngredient:');
-  //   console.log(state);
-  //   console.log(newState);
-  //   return newState;
-  // }),
-  // on(addIngredients, (state, {ingredients}) => {
-  //   const newState = {...state, ingredients: [...state.ingredients, ...ingredients]};
-  //   console.log('addIngredients:');
-  //   console.log(state);
-  //   console.log(newState);
-  //   return newState;
-  // }),
+  on(login, (state, {email, expirationTimestamp, token, userId}) => {
+    // Make an immutable copy. State changes must always be immutable by convention.
+    const user = new User(userId, '', email, '', '', [], '', token, expirationTimestamp);
+    const newState = {...state, user};
+    console.log('login:');
+    console.log(state);
+    console.log(newState);
+    return newState;
+  }),
+  on(logout, (state) => {
+    const newState = {...state, user: undefined};
+    console.log('logout:');
+    console.log(state);
+    console.log(newState);
+    return newState;
+  }),
   // on(updateIngredient, (state, {ingredient}) => {
   //   if (state.editedIndex === undefined) {
   //     console.error('Trying to update an ingredient without assigning an editedIndex.');
@@ -76,17 +79,3 @@ const reducer = createReducer(
 export function authReducer(state: State | undefined, action: Action) {
   return reducer(state, action);
 }
-
-//
-// export function authReducer(state = initialState, action: AddIngredient): any {
-//   switch (action.type) {
-//     case ADD_INGREDIENT: {
-//       // Make an immutable copy. State changes must always be immutable by convention.
-//       return {
-//         ...state,
-//         ingredients: [...state.ingredients, action.payload]
-//       };
-//     }
-//   }
-//
-// }

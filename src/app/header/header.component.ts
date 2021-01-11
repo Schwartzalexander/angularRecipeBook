@@ -3,6 +3,7 @@ import {LoggingService} from '../shared/logging.service';
 import {DataStorageService} from '../shared/data-storage.service';
 import {Subject, Subscription} from 'rxjs';
 import {AuthService} from '../auth/auth.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
@@ -21,7 +22,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userSubject = this.authService.userSubject.subscribe(user => {
+    this.userSubject = this.authService.authObservable.pipe(map(authState => {
+      return authState.user;
+    })).subscribe(user => {
       this.isAuthenticated = !!user; // Does the same as: = !user ? false : true;
     });
   }
