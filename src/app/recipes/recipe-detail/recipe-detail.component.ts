@@ -55,11 +55,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     if (this.recipe === undefined) {
       return;
     }
-
-    for (const ingredient of this.recipe.ingredients) {
-      this.shoppingService.addIngredient(ingredient);
-    }
-
+    this.shoppingService.addIngredients(this.recipe.ingredients);
   }
 
   areThereIngredients(): boolean {

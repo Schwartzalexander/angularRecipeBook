@@ -2,6 +2,9 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Ingredient} from '../shared/model/ingredient.model';
 import {LoggingService} from '../shared/logging.service';
 import {ShoppingService} from './shopping.service';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import * as fromShoppingList from './store/shopping-list.reducer';
 
 @Component({
   selector: 'app-shopping-list',
@@ -12,25 +15,17 @@ export class ShoppingListComponent implements OnInit {
   @Output() itemAdded = new EventEmitter<Ingredient>();
   @Output() itemEdited = new EventEmitter<Ingredient>();
 
-  ingredients: Ingredient[] | undefined;
+  ingredientsObservable: Observable<{ ingredients: Ingredient[] }> | undefined;
 
-  constructor(private loggingService: LoggingService, private shoppingService: ShoppingService) {
+  constructor(private loggingService: LoggingService, private shoppingService: ShoppingService,
+              private store: Store<fromShoppingList.AppState>) {
   }
 
   ngOnInit(): void {
-    this.ingredients = this.shoppingService.ingredients;
-  }
-
-  onItemAdded(ingredient: Ingredient): void {
-    this.shoppingService.addIngredient(ingredient);
-  }
-
-  onItemEdited(ingredient: Ingredient): void {
-    this.loggingService.log('The item ' + ingredient + ' was edited, dude. Sincerly, your shopping-list.');
-    this.itemEdited.emit(ingredient);
+    this.ingredientsObservable = this.store.select('shoppingList');
   }
 
   onListItemClicked(index: number): void {
-    this.shoppingService.clickOnIngredientSubject.next(index);
+    this.shoppingService.startEdit(index);
   }
 }

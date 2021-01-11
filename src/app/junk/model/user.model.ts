@@ -7,12 +7,12 @@ export class User {
               public roles: string[],
               public coronaAttitude: string,
               private Token: string,
-              private tokenExpirationDate?: Date
+              private tokenExpirationTimestamp?: number
   ) {
   }
 
   get token(): string {
-    if (!this.tokenExpirationDate || this.tokenExpirationDate.getTime() < new Date().getTime())
+    if (!this.tokenExpirationTimestamp || this.tokenExpirationTimestamp < new Date().getTime())
       return '';
     return this.Token;
   }

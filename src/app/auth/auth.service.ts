@@ -58,7 +58,7 @@ export class AuthService {
       roles: string[],
       coronaAttitude: string,
       Token: string,
-      tokenExpirationDate?: Date
+      tokenExpirationTimestamp?: number
     } = JSON.parse(userDataRaw);
     const loadedUser = new User(
       userData.id,
@@ -69,11 +69,11 @@ export class AuthService {
       userData.roles,
       userData.coronaAttitude,
       userData.Token,
-      userData.tokenExpirationDate);
+      userData.tokenExpirationTimestamp);
     if (loadedUser.token) {
       this.userSubject.next(loadedUser);
-      if (userData.tokenExpirationDate && userData.tokenExpirationDate instanceof Date)
-        this.autoLogout(userData.tokenExpirationDate.getTime() - new Date().getTime());
+      if (userData.tokenExpirationTimestamp)
+        this.autoLogout(userData.tokenExpirationTimestamp - new Date().getTime());
     }
   }
 
@@ -86,7 +86,7 @@ export class AuthService {
 
   private handleAuthentication(responseData: AuthResponseData): any {
     const expirationDate = new Date(new Date().getTime() + responseData.expiresIn * 1000);
-    const user = new User(responseData.localId, '', responseData.email, '', '', [], '', responseData.idToken, expirationDate);
+    const user = new User(responseData.localId, '', responseData.email, '', '', [], '', responseData.idToken, expirationDate.getTime());
     this.userSubject.next(user);
     localStorage.setItem(LOCAL_STORAGE_KEY_USER_DATA, JSON.stringify(user));
     this.autoLogout(responseData.expiresIn * 1000);

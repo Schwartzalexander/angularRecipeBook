@@ -16,8 +16,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   @ViewChild('shoppingForm') shoppingForm: NgForm | undefined;
 
   editMode = false;
-  editedId: number | undefined;
   editedIngredient: Ingredient | undefined;
+
+  ingredientsSubscription: Subscription | undefined;
 
   // Default values
   defaultName = 'Beer';
@@ -29,21 +30,26 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.shoppingService.clickOnIngredientSubject.subscribe(id => {
-      this.editedId = id;
-      this.editMode = true;
-      this.editedIngredient = this.shoppingService.ingredients[id];
+    this.ingredientsSubscription = this.shoppingService.ingredientsObservable?.subscribe(stateData => {
+      if (stateData.editedIndex !== undefined) {
+        this.editMode = true;
+        this.editedIngredient = stateData.editedIngredient;
 
-      this.shoppingForm?.setValue(
-        {
-          name: this.editedIngredient?.name,
-          amount: this.editedIngredient?.amount
-        });
+        this.shoppingForm?.setValue(
+          {
+            name: this.editedIngredient?.name,
+            amount: this.editedIngredient?.amount
+          });
+      } else {
+        this.editMode = false;
+      }
     });
   }
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
+    this.shoppingService.stopEdit();
+    this.ingredientsSubscription?.unsubscribe();
   }
 
   onSubmit(): void {
@@ -51,27 +57,23 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     const amount = this.shoppingForm?.value.amount;
 
     const ingredient = new Ingredient(name, parseInt(amount, 0));
-    if (this.editMode && this.editedId !== undefined)
-      this.shoppingService.ingredients[this.editedId] = ingredient;
-    else
-      this.shoppingService.ingredients.push(ingredient);
+    if (this.editMode)
+      this.shoppingService.updateIngredient(ingredient);
+    else {
+      this.shoppingService.addIngredient(ingredient);
+    }
 
     this.onClear();
   }
 
-  onEditClicked(nameInput: HTMLInputElement, amountInput: HTMLInputElement): void {
-  }
-
   onClear(): void {
-    this.editMode = false;
-    this.editedId = undefined;
+    this.shoppingService.stopEdit();
     this.shoppingForm?.reset();
+    this.editMode = false;
   }
 
   onDelete(): void {
-    if (this.editMode && this.editedId !== undefined)
-      this.shoppingService.ingredients.splice(this.editedId, 1);
-
+    this.shoppingService.deleteIngredient();
     this.onClear();
   }
 }
