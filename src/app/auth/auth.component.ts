@@ -21,7 +21,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode = true;
   authForm: FormGroup | undefined;
   isLoading = false;
-  errorMessage = '';
+  error: string | undefined = '';
   @ViewChild(PlaceholderDirective) alertHost: PlaceholderDirective | undefined;
   private closeSub: Subscription | undefined;
 
@@ -36,6 +36,10 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authForm = this.createForm();
+    this.authObservable.subscribe(authState => {
+      this.isLoading = authState.loading;
+      this.error = authState.error;
+    });
   }
 
   createForm(): FormGroup {
@@ -57,7 +61,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     const user = new User('', '', email, password, '', [], '', '');
 
-    this.errorMessage = '';
+    this.error = '';
     this.isLoading = true;
     if (this.isLoginMode) {
       this.store.dispatch(loginStart({email, password}));
@@ -81,7 +85,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     }, errorMessage => {
       // on error:
       console.log(errorMessage);
-      this.errorMessage = errorMessage;
+      this.error = errorMessage;
       this.showErrorAlert(errorMessage);
     });
   }
