@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
 import * as fromApp from '../store/app.reducer';
 import {Store} from '@ngrx/store';
-import {autoLogin, logout} from './store/auth.actions';
+import {autoLogin, loginStart, logout, signUpStart} from './store/auth.actions';
 import {State} from './store/auth.reducer';
 
 export interface AuthResponseData {
@@ -37,6 +37,14 @@ export class AuthService {
     this.authObservable = this.store.select(state => state.auth);
   }
 
+  login(email: string, password: string, redirectUrl: string): void {
+    this.store.dispatch(loginStart({email, password, redirectUrl}));
+  }
+
+  signUp(email: string, password: string, redirectUrl: string): void {
+    this.store.dispatch(signUpStart({email, password, redirectUrl}));
+  }
+
   autoLogin(): void {
     this.store.dispatch(autoLogin());
   }
@@ -47,7 +55,7 @@ export class AuthService {
   logout(): void {
     this.store.dispatch(logout({redirectUrl: '/auth'}));
     localStorage.removeItem(LOCAL_STORAGE_KEY_USER_DATA);
-    clearTimeout(this.tokenExpirationTimer);
+    this.clearLogoutTimer();
   }
 
   autoLogout(expirationDuration: number): void {
@@ -55,4 +63,12 @@ export class AuthService {
       this.logout();
     }, expirationDuration);
   }
+
+  clearLogoutTimer(): void {
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+      this.tokenExpirationTimer = undefined;
+    }
+  }
+
 }

@@ -19,7 +19,7 @@ import {ShortenPipe} from './pipes/shorten.pipe';
 import {StarPipe} from './pipes/star.pipe';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
-import { JunkComponent } from './junk.component';
+import {JunkComponent} from './junk.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +41,9 @@ import { JunkComponent } from './junk.component';
     ShortenPipe,
     StarPipe,
     JunkComponent,
+  ],
+  exports: [
+    ShortenPipe
   ],
   imports: [
     JunkRoutingModule,

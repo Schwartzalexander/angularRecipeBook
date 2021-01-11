@@ -26,7 +26,7 @@ export class RecipeItemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  counter(i: number) {
+  counter(i: number): number[] {
     return new Array(i);
   }
 }

@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {autoLogin, login, loginFailed, loginStart, logout, signUpStart} from './auth.actions';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
-import {API_KEY, AuthResponseData, LOCAL_STORAGE_KEY_USER_DATA, URL_SIGN_IN, URL_SIGN_UP} from '../auth.service';
+import {API_KEY, AuthResponseData, AuthService, LOCAL_STORAGE_KEY_USER_DATA, URL_SIGN_IN, URL_SIGN_UP} from '../auth.service';
 import {of} from 'rxjs';
 import {Router} from '@angular/router';
 import {User} from '../../junk/model/user.model';
@@ -11,7 +11,7 @@ import {User} from '../../junk/model/user.model';
 @Injectable()
 export class AuthEffects {
 
-  constructor(private actions: Actions, private http: HttpClient, private router: Router) {
+  constructor(private actions: Actions, private http: HttpClient, private router: Router, private authService: AuthService) {
   }
 
   sendSignUpData = createEffect(() => this.actions.pipe(
@@ -22,6 +22,7 @@ export class AuthEffects {
         password: signUpData.password,
         returnSecureToken: 'true'
       }).pipe(
+        tap(responseData => this.authService.autoLogout(responseData.expiresIn * 1000)),
         map(responseData => handleAuthentication(+responseData.expiresIn, responseData.email, responseData.localId, responseData.idToken,
           signUpData.redirectUrl)),
         catchError((errorResponse) => handleError(errorResponse)),
@@ -38,6 +39,7 @@ export class AuthEffects {
         password: loginData.password,
         returnSecureToken: 'true'
       }).pipe(
+        tap(responseData => this.authService.autoLogout(responseData.expiresIn * 1000)),
         map(responseData => handleAuthentication(+responseData.expiresIn, responseData.email, responseData.localId, responseData.idToken,
           loginData.redirectUrl)),
         catchError((errorResponse) => handleError(errorResponse)),
@@ -75,6 +77,7 @@ export class AuthEffects {
         const loadedUser = new User(userData.id, userData.name, userData.email, userData.password, userData.gender, userData.roles,
           userData.coronaAttitude, userData.Token, userData.tokenExpirationTimestamp);
         if (loadedUser.token && userData.tokenExpirationTimestamp !== undefined) {
+          this.authService.autoLogout(userData.tokenExpirationTimestamp - new Date().getTime());
           return login({
             userId: loadedUser.id,
             email: loadedUser.email,
@@ -84,20 +87,17 @@ export class AuthEffects {
           });
         }
         return {type: 'EMPTY'};
-
-        // if (userData.tokenExpirationTimestamp)
-        //   this.autoLogout(userData.tokenExpirationTimestamp - new Date().getTime());
       }
     )
   ));
 
-  logout = createEffect(() => this.actions.pipe(
+  logoutStart = createEffect(() => this.actions.pipe(
     ofType(logout),
     tap(() => {
+      this.authService.clearLogoutTimer();
       localStorage.removeItem(LOCAL_STORAGE_KEY_USER_DATA);
     })
-    )
-  );
+  ), {dispatch: false});
 }
 
 const handleAuthentication = (expiresIn: number, email: string, userId: string, token: string, redirectUrl: string) => {

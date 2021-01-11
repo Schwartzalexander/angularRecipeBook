@@ -6,10 +6,7 @@ import {Observable, Subscription} from 'rxjs';
 import {AlertComponent} from '../shared/components/alert/alert.component';
 import {PlaceholderDirective} from '../shared/placeholder.directive';
 import {ErrorMessageConverterPipe} from './pipes/error-message-converter.pipe';
-import {Store} from '@ngrx/store';
-import * as fromApp from '../store/app.reducer';
 import {State} from './store/auth.reducer';
-import {loginStart, signUpStart} from './store/auth.actions';
 
 @Component({
   selector: 'app-auth',
@@ -28,10 +25,8 @@ export class AuthComponent implements OnInit, OnDestroy {
   authObservable: Observable<State>;
 
   constructor(private activeRoute: ActivatedRoute, private router: Router, private authService: AuthService,
-              private componentFactoryResolver: ComponentFactoryResolver, private errorMessageConverter: ErrorMessageConverterPipe,
-              private store: Store<fromApp.AppState>) {
-    this.authObservable = this.store.select(state => state.auth);
-
+              private componentFactoryResolver: ComponentFactoryResolver, private errorMessageConverter: ErrorMessageConverterPipe) {
+    this.authObservable = this.authService.authObservable;
   }
 
   ngOnInit(): void {
@@ -62,9 +57,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     const password = this.authForm?.value.password;
 
     if (this.isLoginMode) {
-      this.store.dispatch(loginStart({email, password, redirectUrl: '/recipes'}));
+      this.authService.login(email, password, '/recipes');
     } else {
-      this.store.dispatch(signUpStart({email, password, redirectUrl: '/recipes'}));
+      this.authService.signUp(email, password, '/recipes');
+
     }
   }
 
