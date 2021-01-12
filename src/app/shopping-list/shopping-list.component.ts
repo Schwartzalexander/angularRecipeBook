@@ -9,6 +9,7 @@ import {Observable} from 'rxjs';
   templateUrl: './shopping-list.component.html',
   styleUrls: ['./shopping-list.component.css']
 })
+
 export class ShoppingListComponent implements OnInit, OnDestroy {
 
   ingredientsObservable: Observable<{ ingredients: Ingredient[] }> | undefined;
@@ -26,4 +27,5 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   onListItemClicked(index: number): void {
     this.shoppingService.startEdit(index);
   }
+
 }

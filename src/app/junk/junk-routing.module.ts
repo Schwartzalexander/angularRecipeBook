@@ -7,11 +7,13 @@ import {NoUserShownComponent} from './users/no-user-shown/no-user-shown.componen
 import {UserEditComponent} from './users/user-edit/user-edit.component';
 import {UserDetailComponent} from './users/user-detail/user-detail.component';
 import {JunkComponent} from './junk.component';
+import {AnimationsComponent} from './animations/animations.component';
 
 const junkRoutes: Routes = [
   {
     path: '', component: JunkComponent, children: [
       {path: 'stupid-game', component: GameComponent},
+      {path: 'animations', component: AnimationsComponent},
       {path: 'oberservables', component: OberservablesComponent},
       {
         path: 'users', component: UsersComponent, children: [

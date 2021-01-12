@@ -1,0 +1,21 @@
+<h3>Animation stuff</h3>
+<div class="row">
+  <h3>Only buttonState</h3>
+  <button [@buttonState]="state" (click)="onAnimate()">Animate us!</button>
+</div>
+<hr>
+<div class="row">
+  <h3>Only wildState</h3>
+  <button style="width: 100px; height: 100px" [@wildState]="wildState"
+          (click)="onShrink()">
+    Shrink me!
+  </button>
+</div>
+<hr>
+<div class="row">
+  <h3>buttonState and wildState</h3>
+  <button style="width: 100px; height: 100px" [@buttonState]="state" [@wildState]="wildState"
+          (click)="onShrink()">
+    Shrink me!
+  </button>
+</div>

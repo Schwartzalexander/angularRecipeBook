@@ -20,6 +20,7 @@ import {StarPipe} from './pipes/star.pipe';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
 import {JunkComponent} from './junk.component';
+import { AnimationsComponent } from './animations/animations.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {JunkComponent} from './junk.component';
     ShortenPipe,
     StarPipe,
     JunkComponent,
+    AnimationsComponent,
   ],
   exports: [
     ShortenPipe
