@@ -26,5 +26,21 @@
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "posts",
+      "urls": [
+        "https://recipe-book-f1337-default-rtdb.firebaseio.com/recipes.json*",
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp*",
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword*"
+      ],
+      "cacheConfig": {
+        "maxSize": 15,
+        "maxAge": "12h",
+        "timeout": "10s",
+        "strategy": "freshness"
+      }
+    }
   ]
 }
