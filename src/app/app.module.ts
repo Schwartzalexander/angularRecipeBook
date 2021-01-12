@@ -25,7 +25,7 @@ import {RecipesEffects} from './recipes/store/recipes.effects';
     FooterComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     HttpClientModule,
     AuthModule,
     StoreModule.forRoot(fromApp.appReducer),
