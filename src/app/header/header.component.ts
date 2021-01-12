@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {LoggingService} from '../shared/logging.service';
-import {DataStorageService} from '../shared/data-storage.service';
 import {Subject, Subscription} from 'rxjs';
 import {AuthService} from '../auth/auth.service';
 import {map} from 'rxjs/operators';
@@ -19,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   userSubject: Subscription | undefined;
 
-  constructor(private loggingService: LoggingService, private dataStorageService: DataStorageService, private authService: AuthService, private recipesService: RecipesService) {
+  constructor(private loggingService: LoggingService, private authService: AuthService, private recipesService: RecipesService) {
   }
 
   ngOnInit(): void {
@@ -32,7 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onSaveData(): void {
 
-    this.dataStorageService.storeRecipes(this.recipesSuccessSubject, this.recipesErrorSubject);
+    this.recipesService.storeRecipes(this.recipesSuccessSubject, this.recipesErrorSubject);
     // If successful
     this.recipesSuccessSubject.subscribe((response) => {
       // show success message

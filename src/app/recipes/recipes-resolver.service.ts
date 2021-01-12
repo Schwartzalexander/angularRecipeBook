@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {DataStorageService} from '../shared/data-storage.service';
 import {Recipe} from './model/recipe.model';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {RecipesService} from './recipes.service';
@@ -13,7 +12,7 @@ import {of} from 'rxjs';
 })
 export class RecipesResolverService implements Resolve<Recipe[]> {
 
-  constructor(private dataStorageService: DataStorageService, private recipesService: RecipesService, private actions: Actions) {
+  constructor(private recipesService: RecipesService, private actions: Actions) {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): any {

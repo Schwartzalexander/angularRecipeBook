@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as fromApp from '../store/app.reducer';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {State} from './store/recipes.reducer';
 import {Recipe} from './model/recipe.model';
-import {addRecipe, deleteRecipe, fetchRecipes, selectRecipe, setRecipes, startEdit, stopEdit, updateRecipe} from './store/recipes.actions';
+import {addRecipe, deleteRecipe, fetchRecipes, selectRecipe, setRecipes, startEdit, stopEdit, storeRecipes, updateRecipe} from './store/recipes.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -66,5 +66,10 @@ export class RecipesService {
 
   fetchRecipes(): void {
     this.store.dispatch(fetchRecipes());
+  }
+
+  storeRecipes(recipesSuccessSubject: Subject<any>, recipesErrorSubject: Subject<any>): void {
+    this.store.dispatch(storeRecipes());
+
   }
 }
