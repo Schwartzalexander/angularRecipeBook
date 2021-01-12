@@ -1,21 +1,53 @@
-<h3>Animation stuff</h3>
-<div class="row">
-  <h3>Only buttonState</h3>
-  <button [@buttonState]="state" (click)="onAnimate()">Animate us!</button>
-</div>
-<hr>
-<div class="row">
-  <h3>Only wildState</h3>
-  <button style="width: 100px; height: 100px" [@wildState]="wildState"
-          (click)="onShrink()">
-    Shrink me!
-  </button>
-</div>
-<hr>
-<div class="row">
-  <h3>buttonState and wildState</h3>
-  <button style="width: 100px; height: 100px" [@buttonState]="state" [@wildState]="wildState"
-          (click)="onShrink()">
-    Shrink me!
-  </button>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>Animations</h1>
+      <button class="btn btn-primary" (click)="onAnimate()">Animate!</button>
+      <button class="btn btn-primary" (click)="onShrink()">Shrink!</button>
+      <hr>
+      <div
+        style="width: 100px; height: 100px"
+        [@divState]="state"
+        (@divState.start)="animationStarted($event)"
+        (@divState.done)="animationEnded($event)">
+      </div>
+      <br>
+      <div
+        style="width: 100px; height: 100px"
+        [@wildState]="wildState">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <input type="text" #input>
+      <button class="btn btn-primary" (click)="onAdd(input.value)">Add Item!</button>
+      <hr>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          (click)="onDelete(item)"
+          [@list1]
+          *ngFor="let item of list">
+          {{ item }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          (click)="onDelete(item)"
+          [@list2]
+          *ngFor="let item of list">
+          {{ item }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
 </div>
