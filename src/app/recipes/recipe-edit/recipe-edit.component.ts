@@ -1,20 +1,25 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Recipe} from 'src/app/recipes/model/recipe.model';
-import {RecipeService} from 'src/app/recipes/recipe.service';
+import {RecipesService} from 'src/app/recipes/recipes.service';
 import {Ingredient} from '../../shared/model/ingredient.model';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
-export class RecipeEditComponent implements OnInit {
-  id: number | undefined;
+export class RecipeEditComponent implements OnInit, OnDestroy {
+  editedIndex: number | undefined;
   editMode = false;
   recipe: Recipe | undefined;
   recipeForm: FormGroup | undefined;
+  nextIndex: number | undefined;
+
+  recipesSubscription: Subscription | undefined;
+  paramsSubscription: Subscription | undefined;
 
   // select options
   poisonLevelOptions = [
@@ -40,18 +45,38 @@ export class RecipeEditComponent implements OnInit {
   // Two-way-bound values
   descriptionValue: string | undefined = this.defaultDescription;
 
-  constructor(private activeRoute: ActivatedRoute, private recipeService: RecipeService, private router: Router) {
+  constructor(private activatedRoute: ActivatedRoute, private recipesService: RecipesService, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.activeRoute.params.subscribe(
-      (params) => {
-        this.id = +params.id;
-        this.editMode = params.id != null;
-        this.recipe = this.recipeService.recipes[this.id];
-        this.recipeForm = this.createForm();
+    this.recipesSubscription = this.recipesService.recipesObservable.subscribe((recipesState) => {
+      this.editedIndex = recipesState.editedIndex;
+      this.nextIndex = recipesState.recipes.length;
+      if (recipesState.editedIndex !== undefined) {
+        this.editMode = recipesState.editedIndex !== undefined;
+        this.recipe = recipesState.recipes[recipesState.editedIndex];
+      } else {
+        this.editMode = false;
+        this.recipe = undefined;
       }
-    );
+      this.recipeForm = this.createForm();
+    });
+
+    // Retrieve index from route params
+    this.paramsSubscription = this.activatedRoute.params.subscribe(
+      (params) => {
+        const index = +params.id;
+        if (index > -1)
+          this.recipesService.startEdit();
+        else
+          this.recipesService.stopEdit();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.recipesService.stopEdit();
+    this.recipesSubscription?.unsubscribe();
+    this.paramsSubscription?.unsubscribe();
   }
 
   createForm(): FormGroup {
@@ -62,7 +87,7 @@ export class RecipeEditComponent implements OnInit {
     let poisonLevel = this.defaultPoisonLevel;
     const ingredientsFormArray = new FormArray([]);
 
-    if (this.editMode && this.id !== undefined && this.recipe !== undefined) {
+    if (this.editMode && this.editedIndex !== undefined && this.recipe !== undefined) {
       name = this.recipe.name;
       imagePath = this.recipe.imagePath;
       description = this.recipe.description;
@@ -106,13 +131,13 @@ export class RecipeEditComponent implements OnInit {
     }
     const recipe = new Recipe(name, description, imagePath, ingredients, poisonLevel, rating);
 
-    if (this.editMode && this.id !== undefined) {
-      this.recipeService.recipes[this.id] = recipe;
-      this.router.navigate(['..'], {relativeTo: this.activeRoute});
+    if (this.editMode && this.editedIndex !== undefined) {
+      // Edit recipe
+      this.recipesService.updateRecipe(recipe, ['/recipes', '' + this.editedIndex]);
+      // this.router.navigate(['..'], {relativeTo: this.activatedRoute});
     } else {
-      this.recipeService.recipes.push(recipe);
-      const redirectId = this.recipeService.recipes.length - 1;
-      this.router.navigate(['..', redirectId], {relativeTo: this.activeRoute});
+      // New recipe
+      this.recipesService.addRecipe(recipe, ['/recipes', '' + this.nextIndex]);
     }
     this.recipeForm?.reset();
 
@@ -135,8 +160,7 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.router.navigate(['..'], {relativeTo: this.activeRoute});
-
+    this.recipesService.stopEdit(['/recipes', '' + this.editedIndex]);
   }
 
 }

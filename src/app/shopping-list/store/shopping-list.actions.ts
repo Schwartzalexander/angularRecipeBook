@@ -5,5 +5,5 @@ export const addIngredient = createAction('[ShoppingList] Adding ingredient', pr
 export const addIngredients = createAction('[ShoppingList] Adding ingredients', props<{ ingredients: Ingredient[] }>());
 export const updateIngredient = createAction('[ShoppingList] Updating ingredient', props<{ ingredient: Ingredient }>());
 export const deleteIngredient = createAction('[ShoppingList] Deleting ingredient');
-export const startEdit = createAction('[ShoppingList] Starting editing ingredient', props<{ id: number }>());
+export const startEdit = createAction('[ShoppingList] Starting editing ingredient', props<{ editedIndex: number }>());
 export const stopEdit = createAction('[ShoppingList] Stopping editing ingredient');

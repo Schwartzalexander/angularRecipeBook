@@ -29,12 +29,12 @@ export class UserEditComponent implements OnInit {
 
   userForm: FormGroup | undefined;
 
-  constructor(private activeRoute: ActivatedRoute, private userService: UserService, private router: Router,
+  constructor(private activatedRoute: ActivatedRoute, private userService: UserService, private router: Router,
               private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.activeRoute.params.subscribe(
+    this.activatedRoute.params.subscribe(
       (params) => {
         this.id = +params.id;
         this.editMode = params.id != null;
@@ -122,7 +122,7 @@ export class UserEditComponent implements OnInit {
       this.router.navigate(['..'], {relativeTo: this.route});
     } else {
       this.userService.users.push(user);
-      this.router.navigate(['..', index + 1], {relativeTo: this.activeRoute});
+      this.router.navigate(['..', index + 1], {relativeTo: this.activatedRoute});
     }
 
     this.userForm?.reset();

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Recipe} from 'src/app/recipes/model/recipe.model';
 import {LoggingService} from 'src/app/shared/logging.service';
-import {RecipeService} from 'src/app/recipes/recipe.service';
+import {RecipesService} from 'src/app/recipes/recipes.service';
 
 @Component({
   selector: 'app-recipe-item',
@@ -20,7 +20,7 @@ export class RecipeItemComponent implements OnInit {
   @Input() recipe: Recipe | undefined;
   @Input() id: number | undefined;
 
-  constructor(private recipeService: RecipeService, private loggingService: LoggingService) {
+  constructor(private recipesService: RecipesService, private loggingService: LoggingService) {
   }
 
   ngOnInit(): void {

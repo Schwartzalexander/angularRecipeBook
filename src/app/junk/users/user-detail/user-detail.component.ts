@@ -17,11 +17,11 @@ export class UserDetailComponent implements OnInit {
   id: number | undefined;
 
   constructor(private dataService: DataService, private loggingService: LoggingService, private userService: UserService,
-              private shoppingService: ShoppingService, private activeRoute: ActivatedRoute, private router: Router) {
+              private shoppingService: ShoppingService, private activatedRoute: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.activeRoute.params.subscribe(
+    this.activatedRoute.params.subscribe(
       (params) => {
         this.id = +params.id;
         this.user = this.userService.users[this.id];
@@ -40,6 +40,6 @@ export class UserDetailComponent implements OnInit {
   deleteUser(): void {
     if (this.id !== undefined)
       this.userService.users.splice(this.id, 1);
-    this.router.navigate(['..'], {relativeTo: this.activeRoute});
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
   }
 }

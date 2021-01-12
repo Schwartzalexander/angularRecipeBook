@@ -1,41 +1,43 @@
-import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {RecipeService} from '../recipes/recipe.service';
+import {RecipesService} from '../recipes/recipes.service';
 import {Observable, Subject} from 'rxjs';
 import {Recipe} from '../recipes/model/recipe.model';
-import {tap} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth.service';
+import {environment} from '../../environments/environment';
+import {Injectable} from '@angular/core';
+
+const RECIPES_URL = environment.urlRecipes;
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataStorageService {
 
-  url = 'https://recipe-book-f1337-default-rtdb.firebaseio.com/recipes.json';
-
-  constructor(private http: HttpClient, private recipeService: RecipeService, private authService: AuthService) {
+  constructor(private http: HttpClient, private recipesService: RecipesService, private authService: AuthService) {
   }
 
   storeRecipes(recipesSuccessSubject?: Subject<any>, recipesErrorSubject?: Subject<any>): void {
-    const recipes = this.recipeService.recipes;
-    this.http.put(this.url, recipes).subscribe(response => {
-        console.log(response);
-        recipesSuccessSubject?.next(response);
-      },
-      response => {
-        console.log(response);
-        recipesErrorSubject?.next(response);
-      },
+    this.recipesService.recipesObservable.pipe(
+      map((recipesState => recipesState.recipes)),
+      tap((recipes) => {
+        this.http.put(RECIPES_URL, recipes).subscribe(response => {
+            console.log(response);
+            recipesSuccessSubject?.next(response);
+          },
+          response => {
+            console.log(response);
+            recipesErrorSubject?.next(response);
+          },
+        );
+      })
     );
   }
 
   fetchRecipesObservable(): Observable<Recipe[]> {
-    return this.http.get<Recipe[]>(this.url).pipe(
+    return this.http.get<Recipe[]>(RECIPES_URL).pipe(
       tap(recipes => {
-        // Clear the original array
-        this.recipeService.recipes.length = 0;
-        for (const recipe of recipes)
-          this.recipeService.recipes.push(recipe);
+        this.recipesService.dispatchRecipes(recipes);
       }));
   }
 

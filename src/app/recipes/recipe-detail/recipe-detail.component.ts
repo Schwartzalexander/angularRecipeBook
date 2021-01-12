@@ -2,10 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Recipe} from 'src/app/recipes/model/recipe.model';
-import {DataService} from 'src/app/junk/services/data.service';
-import {LoggingService} from 'src/app/shared/logging.service';
-import {RecipeService} from 'src/app/recipes/recipe.service';
-import {ShoppingService} from 'src/app/shopping-list/shopping.service';
+import {RecipesService} from 'src/app/recipes/recipes.service';
+import {ShoppingService} from '../../shopping-list/shopping.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -14,41 +12,40 @@ import {ShoppingService} from 'src/app/shopping-list/shopping.service';
 })
 export class RecipeDetailComponent implements OnInit, OnDestroy {
 
+  recipesSubscription: Subscription | undefined;
+  paramsSubscription: Subscription | undefined;
+
   recipe: Recipe | undefined;
-  id: number | undefined;
+  index: number | undefined;
 
-  dataServiceSubscription: Subscription | undefined;
-
-  constructor(private dataService: DataService, private loggingService: LoggingService, private recipeService: RecipeService,
-              private shoppingService: ShoppingService, private route: ActivatedRoute, private router: Router) {
-
-    this.dataServiceSubscription = this.dataService.subject.subscribe((message: string) => this.reactToEventFromService(message));
+  constructor(private recipesService: RecipesService, private activatedRoute: ActivatedRoute,
+              private router: Router, private shoppingService: ShoppingService) {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(
+    // Retrieve selected index from activatedRoute params
+    this.paramsSubscription = this.activatedRoute.params.subscribe(
       (params) => {
-        this.id = +params.id;
-        this.recipe = this.recipeService.recipes[this.id];
-      }
-    );
+        const index = +params.id;
+        if (index !== undefined)
+          this.recipesService.selectRecipe(index);
+      });
+
+    this.recipesSubscription = this.recipesService.recipesObservable
+      .subscribe((recipesState) => {
+        this.index = recipesState.selectedIndex;
+        if (this.index !== undefined)
+          this.recipe = recipesState.recipes[this.index];
+        else
+          this.recipe = undefined;
+      });
+
   }
 
   ngOnDestroy(): void {
-    // The subscription could be destroyed here, but if we did that, it wouldn't do anything at all.
-    // To show the effect (receive an event), we must switch to the shopping list and
-    // therefore destroy this component.
-    // this.dataServiceSubscription?.unsubscribe()
-  }
-
-  /**
-   * This function is called, after the subject in dataService is emitted. This happens, when clicking the edit button in
-   * shopping-edit-component.
-   * @param message message
-   */
-  reactToEventFromService(message: string): void {
-    this.loggingService.log(message);
-    // alert(message)
+    this.recipesService.stopEdit();
+    this.recipesSubscription?.unsubscribe();
+    this.paramsSubscription?.unsubscribe();
   }
 
   addToShoppingList(): void {
@@ -70,9 +67,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   deleteRecipe(): void {
-    if (this.id !== undefined) {
-      this.recipeService.recipes.splice(this.id, 1);
-      this.router.navigate(['..'], {relativeTo: this.route});
+    if (this.index !== undefined) {
+      this.recipesService.deleteRecipe(['/recipes']);
+      // this.router.navigate(['..'], {relativeTo: this.activatedRoute});
     }
 
   }

@@ -24,7 +24,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   authObservable: Observable<State>;
 
-  constructor(private activeRoute: ActivatedRoute, private router: Router, private authService: AuthService,
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private authService: AuthService,
               private componentFactoryResolver: ComponentFactoryResolver, private errorMessageConverter: ErrorMessageConverterPipe) {
     this.authObservable = this.authService.authObservable;
   }

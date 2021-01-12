@@ -62,8 +62,8 @@ const reducer: ActionReducer<State, Action> = createReducer(
     console.log(newState);
     return newState;
   }),
-  on(startEdit, (state, {id}) => {
-    const newState = {...state, editedIndex: id, editedIngredient: {...state.ingredients[id]}};
+  on(startEdit, (state, {editedIndex}) => {
+    const newState = {...state, editedIndex, editedIngredient: {...state.ingredients[editedIndex]}};
     console.log('startEdit:');
     console.log(state);
     console.log(newState);

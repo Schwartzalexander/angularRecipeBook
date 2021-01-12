@@ -38,7 +38,7 @@ export class ShoppingService {
   }
 
   startEdit(id: number): void {
-    this.store.dispatch(startEdit({id}));
+    this.store.dispatch(startEdit({editedIndex: id}));
   }
 
   stopEdit(): void {
