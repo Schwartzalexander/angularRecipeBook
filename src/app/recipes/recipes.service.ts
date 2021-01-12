@@ -4,7 +4,7 @@ import * as fromApp from '../store/app.reducer';
 import {Observable} from 'rxjs';
 import {State} from './store/recipes.reducer';
 import {Recipe} from './model/recipe.model';
-import {addRecipe, deleteRecipe, selectRecipe, setRecipes, startEdit, stopEdit, updateRecipe} from './store/recipes.actions';
+import {addRecipe, deleteRecipe, fetchRecipes, selectRecipe, setRecipes, startEdit, stopEdit, updateRecipe} from './store/recipes.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -62,5 +62,9 @@ export class RecipesService {
 
   stopEdit(redirectUrl?: string[]): void {
     this.store.dispatch(stopEdit({redirectUrl}));
+  }
+
+  fetchRecipes(): void {
+    this.store.dispatch(fetchRecipes());
   }
 }

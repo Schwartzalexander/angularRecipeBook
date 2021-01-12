@@ -1,6 +1,7 @@
 import {createAction, props} from '@ngrx/store';
 import {Recipe} from '../model/recipe.model';
 
+export const fetchRecipes = createAction('[Recipes] Fetch recipes');
 export const setRecipes = createAction('[Recipes] Set recipes', props<{ recipes: Recipe[] }>());
 export const selectRecipe = createAction('[Recipes] Select recipe', props<{ selectedIndex: number }>());
 export const deleteRecipe = createAction('[Recipes] Delete recipe', props<{ redirectUrl?: string[] }>());

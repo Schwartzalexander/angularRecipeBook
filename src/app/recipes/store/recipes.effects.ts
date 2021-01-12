@@ -3,8 +3,12 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RecipesService} from '../recipes.service';
-import {tap} from 'rxjs/operators';
-import {addRecipe, deleteRecipe, stopEdit, updateRecipe} from './recipes.actions';
+import {map, switchMap, tap} from 'rxjs/operators';
+import {addRecipe, deleteRecipe, fetchRecipes, setRecipes, stopEdit, updateRecipe} from './recipes.actions';
+import {environment} from '../../../environments/environment';
+import {Recipe} from '../model/recipe.model';
+
+const RECIPES_URL = environment.urlRecipes;
 
 @Injectable()
 export class RecipesEffects {
@@ -13,22 +17,19 @@ export class RecipesEffects {
               private recipesService: RecipesService, private activatedRoute: ActivatedRoute) {
   }
 
-  // sendSignUpData = createEffect(() => this.actions.pipe(
-  //   ofType(signUpStart),
-  //   switchMap((signUpData: { email: string, password: string, redirectUrl: string }) => {
-  //     return this.http.post<AuthResponseData>(URL_SIGN_UP + '?key=' + API_KEY, {
-  //       email: signUpData.email,
-  //       password: signUpData.password,
-  //       returnSecureToken: 'true'
-  //     }).pipe(
-  //       tap(responseData => this.authService.autoLogout(responseData.expiresIn * 1000)),
-  //       map(responseData => handleAuthentication(+responseData.expiresIn, responseData.email, responseData.localId, responseData.idToken,
-  //         signUpData.redirectUrl)),
-  //       catchError((errorResponse) => handleError(errorResponse)),
-  //     );
-  //   })
-  //   )
-  // );
+  fetchRecipes = createEffect(() => this.actions.pipe(
+    ofType(fetchRecipes),
+    switchMap(() => this.http.get<Recipe[]>(RECIPES_URL)),
+    map(recipes => {
+      return recipes.map((recipe: Recipe) => {
+        return {
+          ...recipe,
+          ingredients: recipe.ingredients ? recipe.ingredients : []
+        };
+      });
+    }),
+    map(recipes => setRecipes({recipes}))
+  ));
 
   authRedirect = createEffect(() => this.actions.pipe(
     ofType(addRecipe, updateRecipe, deleteRecipe, stopEdit),

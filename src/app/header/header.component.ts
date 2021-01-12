@@ -4,6 +4,7 @@ import {DataStorageService} from '../shared/data-storage.service';
 import {Subject, Subscription} from 'rxjs';
 import {AuthService} from '../auth/auth.service';
 import {map} from 'rxjs/operators';
+import {RecipesService} from '../recipes/recipes.service';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   userSubject: Subscription | undefined;
 
-  constructor(private loggingService: LoggingService, private dataStorageService: DataStorageService, private authService: AuthService) {
+  constructor(private loggingService: LoggingService, private dataStorageService: DataStorageService, private authService: AuthService, private recipesService: RecipesService) {
   }
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onFetchData(): void {
-    this.dataStorageService.fetchRecipes();
+    this.recipesService.fetchRecipes();
   }
 
   ngOnDestroy(): void {
