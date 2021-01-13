@@ -1,16 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
 body {
-    background-color: #d9ecff;
+  background-color: #ffe2d9;
 }
 
 /* Form validation */
 input.ng-invalid.ng-touched {
-    border: 1px solid red
+  border: 1px solid red
 }
+
 textarea.ng-invalid.ng-touched {
-    border: 1px solid red
+  border: 1px solid red
 }
+
 select.ng-invalid.ng-touched {
-    border: 1px solid red
+  border: 1px solid red
 }
