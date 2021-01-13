@@ -9,7 +9,7 @@ import {ErrorsModule} from './errors/errors.module';
 import {AuthModule} from './auth/auth.module';
 import {SharedModule} from './shared/shared.module';
 import {CoreModule} from './core.module';
-import {ActionReducer, MetaReducer, StoreModule} from '@ngrx/store';
+import {StoreModule} from '@ngrx/store';
 import * as fromApp from './store/app.reducer';
 import {EffectsModule} from '@ngrx/effects';
 import {AuthEffects} from './auth/store/auth.effects';
@@ -19,19 +19,6 @@ import {StoreRouterConnectingModule} from '@ngrx/router-store';
 import {RecipesEffects} from './recipes/store/recipes.effects';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ServiceWorkerModule} from '@angular/service-worker';
-import {localStorageSync} from 'ngrx-store-localstorage';
-
-/**
- * Writes the specified store data into the local session storage and retrieves it on app start. Therefore, the state survives a browser refresh.
- * @see https://github.com/btroncone/ngrx-store-localstorage
- * @param reducer reducer
- */
-export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  const keys = ['shoppingList', 'auth', 'recipes'];
-  return localStorageSync({keys, rehydrate: true, storage: sessionStorage})(reducer);
-}
-
-const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [
@@ -44,7 +31,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     HttpClientModule,
     BrowserAnimationsModule,
     AuthModule,
-    StoreModule.forRoot(fromApp.appReducer, {metaReducers}),
+    StoreModule.forRoot(fromApp.appReducer, {metaReducers: fromApp.metaReducers}),
     EffectsModule.forRoot([AuthEffects, RecipesEffects]),
     StoreDevtoolsModule.instrument(({logOnly: environment.production})),
     StoreRouterConnectingModule.forRoot(),
