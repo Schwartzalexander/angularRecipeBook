@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 body {
-  background-color: #ffe2d9;
+  background: linear-gradient(to right, #68cdff, #ffc1c1);
 }
 
 /* Form validation */
